@@ -1,3 +1,28 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+@theme {
+	--color-brand-green: #39ff14;
+	--color-brand-pink: #ff1f9c;
+	--font-fredoka: 'Nunito', sans-serif;
+}
+
+@layer base {
+	html,
+	body {
+		height: 100%;
+		overflow: hidden;
+	}
+}
+
+@layer utilities {
+	.text-outlined {
+		-webkit-text-stroke: 3px black;
+		paint-order: stroke fill;
+	}
+	.text-outlined-thin {
+		-webkit-text-stroke: 2px black;
+		paint-order: stroke fill;
+	}
+}
