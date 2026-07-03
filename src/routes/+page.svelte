@@ -52,7 +52,7 @@
 						</div>
 
 						<h1
-							class="font-fredoka font-black text-brand-pink text-outlined text-center leading-tight shrink-0"
+							class="font-fredoka font-black text-brand-pink text-center leading-tight shrink-0"
 							style="font-size: clamp(2.8rem, 13vw, 5rem); white-space: pre-line"
 						>
 							{t.landing.title}
@@ -60,7 +60,7 @@
 
 						<button
 							onclick={() => goTo(1)}
-							class="bg-brand-green font-fredoka font-black text-brand-pink text-outlined-thin rounded-2xl w-full py-3 shrink-0"
+							class="bg-brand-green font-fredoka font-black text-brand-pink rounded-2xl w-full py-3 shrink-0"
 							style="font-size: clamp(2rem, 10vw, 3.5rem)"
 						>
 							{t.landing.cta}
@@ -90,8 +90,8 @@
 
 					<div class="shrink-0 py-3 text-center">
 						<span class="font-fredoka font-black text-2xl">
-							<span class="text-brand-pink text-outlined-thin">LoVeCRAFT</span>
-							<span class="text-brand-green text-outlined-thin"> BEeRS</span>
+							<span class="text-brand-pink">LoVeCRAFT</span>
+							<span class="text-brand-green"> BEeRS</span>
 						</span>
 					</div>
 				</div>
@@ -101,7 +101,7 @@
 				<QuestionLayout onback={() => goTo(0)} backLabel={t.back}>
 					<div class="w-full max-w-xl mx-auto flex flex-col gap-4">
 						<h2
-							class="font-fredoka font-black text-brand-pink text-outlined text-center shrink-0"
+							class="font-fredoka font-black text-brand-pink text-center shrink-0"
 							style="font-size: clamp(1.8rem, 8vw, 2.8rem)"
 						>
 							{t.q1.question}
@@ -127,7 +127,7 @@
 				<QuestionLayout onback={() => goTo(1)} backLabel={t.back}>
 					<div class="w-full max-w-xl mx-auto flex flex-col gap-3">
 						<h2
-							class="font-fredoka font-black text-brand-pink text-outlined text-center shrink-0"
+							class="font-fredoka font-black text-brand-pink text-center shrink-0"
 							style="font-size: clamp(1.8rem, 8vw, 2.8rem)"
 						>
 							{t.q2.question}
@@ -181,7 +181,7 @@
 				<QuestionLayout onback={() => goTo(3)} backLabel={t.back}>
 					<div class="w-full max-w-xl mx-auto flex flex-col gap-6">
 						<h2
-							class="font-fredoka font-black text-brand-pink text-outlined text-center shrink-0"
+							class="font-fredoka font-black text-brand-pink text-center shrink-0"
 							style="font-size: clamp(1.8rem, 8vw, 2.8rem)"
 						>
 							{t.q4.question}
@@ -211,7 +211,7 @@
 				<QuestionLayout onback={() => goTo(4)} backLabel={t.back}>
 					<div class="w-full max-w-xl mx-auto flex flex-col gap-4">
 						<h2
-							class="font-fredoka font-black text-brand-pink text-outlined text-center shrink-0"
+							class="font-fredoka font-black text-brand-pink text-center shrink-0"
 							style="font-size: clamp(2rem, 10vw, 3rem)"
 						>
 							{t.result.title}

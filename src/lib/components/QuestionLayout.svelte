@@ -34,8 +34,8 @@
 
 	<div class="shrink-0 py-4 text-center">
 		<span class="font-fredoka font-black text-2xl">
-			<span class="text-brand-pink text-outlined-thin">LoVeCRAFT</span>
-			<span class="text-brand-green text-outlined-thin"> BEeRS</span>
+			<span class="text-brand-pink">LoVeCRAFT</span>
+			<span class="text-brand-green"> BEeRS</span>
 		</span>
 	</div>
 </div>
