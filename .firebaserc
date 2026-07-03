@@ -1,5 +1,5 @@
 {
-	"projects": {
-		"default": "lovecraft-beer-selector"
-	}
+  "projects": {
+    "default": "lovecraft-beer-selector"
+  }
 }
