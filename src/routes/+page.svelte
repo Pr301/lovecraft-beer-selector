@@ -17,6 +17,8 @@
 	let locale = $state<Locale>('en');
 	let mode = $state<Mode>('quiz');
 	let randomBeer = $state<Beer | null>(null);
+	let diceValue = $state<number | null>(null);
+	let diceRolling = $state(false);
 	let answers = $state({
 		type: '' as TypeId | '',
 		color: '' as ColorId | '',
@@ -35,6 +37,10 @@
 		{ id: 'style', emoji: '🍺' },
 		{ id: 'random', emoji: '🎲' }
 	];
+	const RANDOM_OPTIONS: { id: 'slot' | 'dice'; emoji: string }[] = [
+		{ id: 'slot', emoji: '🎰' },
+		{ id: 'dice', emoji: '🎲' }
+	];
 
 	function goTo(newStep: number) {
 		direction = newStep > step ? 1 : -1;
@@ -44,9 +50,11 @@
 	function selectMode(m: Mode) {
 		mode = m;
 		answers = { type: '', color: '', abv: '', country: '', city: '' };
+		randomBeer = null;
+		diceValue = null;
+		diceRolling = false;
 		if (m === 'random') {
-			randomBeer = beers[Math.floor(Math.random() * beers.length)];
-			goTo(6);
+			goTo(7);
 		} else if (m === 'country') {
 			goTo(5);
 		} else {
@@ -58,7 +66,35 @@
 		answers = { type: '', color: '', abv: '', country: '', city: '' };
 		mode = 'quiz';
 		randomBeer = null;
+		diceValue = null;
+		diceRolling = false;
 		goTo(0);
+	}
+
+	function beerForTap(tap: number): Beer {
+		return beers[(tap - 1) % beers.length];
+	}
+
+	function pullSlotLever() {
+		randomBeer = beers[Math.floor(Math.random() * beers.length)];
+		goTo(6);
+	}
+
+	function rollDice() {
+		if (diceRolling) return;
+		diceRolling = true;
+		diceValue = null;
+		let ticks = 0;
+		const maxTicks = 16;
+		const interval = setInterval(() => {
+			diceValue = 1 + Math.floor(Math.random() * 20);
+			ticks++;
+			if (ticks >= maxTicks) {
+				clearInterval(interval);
+				diceRolling = false;
+				randomBeer = beerForTap(diceValue!);
+			}
+		}, 60);
 	}
 </script>
 
@@ -271,10 +307,101 @@
 						{/if}
 					</div>
 				</QuestionLayout>
+			{:else if step === 7}
+				<!-- Random: choose how to pick -->
+				<QuestionLayout onback={() => goTo(1)} backLabel={t.back}>
+					<div class="w-full max-w-xl mx-auto flex flex-col gap-4">
+						<h2
+							class="font-fredoka font-black text-brand-pink text-center shrink-0"
+							style="font-size: clamp(1.8rem, 8vw, 2.8rem)"
+						>
+							{t.random.question}
+						</h2>
+						<div class="flex flex-col gap-3">
+							{#each RANDOM_OPTIONS as { id, emoji } (id)}
+								<button
+									onclick={() => goTo(id === 'slot' ? 8 : 9)}
+									class="bg-brand-green rounded-2xl py-3 px-5 flex items-center gap-4 text-left"
+								>
+									<span class="text-4xl shrink-0">{emoji}</span>
+									<span class="flex flex-col">
+										<span class="font-fredoka font-black text-2xl text-black leading-tight">
+											{t.random.options[id].label}
+										</span>
+										<span class="font-fredoka font-medium text-sm text-black/60">
+											{t.random.options[id].desc}
+										</span>
+									</span>
+								</button>
+							{/each}
+						</div>
+					</div>
+				</QuestionLayout>
+			{:else if step === 8}
+				<!-- Random: slot machine (decorative picture only) -->
+				<QuestionLayout onback={() => goTo(7)} backLabel={t.back}>
+					<div class="w-full max-w-xl mx-auto flex flex-col items-center gap-6">
+						<h2
+							class="font-fredoka font-black text-brand-pink text-center shrink-0"
+							style="font-size: clamp(1.8rem, 8vw, 2.8rem)"
+						>
+							{t.random.options.slot.label}
+						</h2>
+						<div
+							class="w-48 h-48 rounded-full bg-gray-100 flex items-center justify-center shrink-0"
+						>
+							<span class="text-8xl">🎰</span>
+						</div>
+						<button
+							onclick={pullSlotLever}
+							class="bg-brand-green font-fredoka font-black text-3xl text-black py-3 rounded-2xl w-full shrink-0"
+						>
+							{t.random.slotCta}
+						</button>
+					</div>
+				</QuestionLayout>
+			{:else if step === 9}
+				<!-- Random: roll a d20 for one of 20 taps -->
+				<QuestionLayout onback={() => goTo(7)} backLabel={t.back}>
+					<div class="w-full max-w-xl mx-auto flex flex-col items-center gap-6">
+						<h2
+							class="font-fredoka font-black text-brand-pink text-center shrink-0"
+							style="font-size: clamp(1.8rem, 8vw, 2.8rem)"
+						>
+							{t.random.options.dice.label}
+						</h2>
+						<button
+							onclick={rollDice}
+							disabled={diceRolling}
+							class="w-40 h-40 rounded-3xl bg-brand-green flex items-center justify-center shrink-0 disabled:opacity-70"
+						>
+							<span class="font-fredoka font-black text-6xl text-black">
+								{diceValue ?? '🎲'}
+							</span>
+						</button>
+						<p class="font-fredoka font-black text-xl text-center shrink-0 h-7">
+							{#if diceRolling}
+								{t.random.rolling}
+							{:else if diceValue !== null}
+								{t.random.tapLabel} #{diceValue}
+							{:else}
+								{t.random.diceCta}
+							{/if}
+						</p>
+						{#if diceValue !== null && !diceRolling}
+							<button
+								onclick={() => goTo(6)}
+								class="bg-brand-pink font-fredoka font-black text-2xl text-white py-3 rounded-2xl w-full shrink-0"
+							>
+								{t.random.seeResult}
+							</button>
+						{/if}
+					</div>
+				</QuestionLayout>
 			{:else if step === 6}
 				<!-- Result -->
 				<QuestionLayout
-					onback={() => goTo(mode === 'random' ? 1 : mode === 'style' ? 2 : 5)}
+					onback={() => goTo(mode === 'random' ? 7 : mode === 'style' ? 2 : 5)}
 					backLabel={t.back}
 				>
 					<div class="w-full max-w-xl mx-auto flex flex-col gap-4">

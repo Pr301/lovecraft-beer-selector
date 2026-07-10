@@ -61,6 +61,18 @@ export const translations = {
 				heraklion: 'Heraklion'
 			}
 		},
+		random: {
+			question: 'How should we pick?',
+			options: {
+				slot: { label: 'Slot Machine', desc: 'Pull the lever and let fate decide' },
+				dice: { label: 'D20 Tap Roll', desc: 'Roll for one of our 20 taps' }
+			},
+			slotCta: 'Pull the Lever!',
+			diceCta: 'Roll the D20!',
+			rolling: 'Rolling...',
+			tapLabel: 'Tap',
+			seeResult: 'See My Beer!'
+		},
 		result: {
 			title: 'Your Beer Is:',
 			explore: 'Explore more beers',
@@ -127,6 +139,18 @@ export const translations = {
 				thessaloniki: 'Θεσσαλονίκη',
 				heraklion: 'Ηράκλειο'
 			}
+		},
+		random: {
+			question: 'Πώς θέλεις να διαλέξουμε;',
+			options: {
+				slot: { label: 'Slot Machine', desc: 'Τράβα τον μοχλό κι άσε την τύχη' },
+				dice: { label: 'Ζάρι D20', desc: 'Ρίξε ζάρι για μία από τις 20 βρύσες' }
+			},
+			slotCta: 'Τράβα τον μοχλό!',
+			diceCta: 'Ρίξε το D20!',
+			rolling: 'Κυλάει...',
+			tapLabel: 'Βρύση',
+			seeResult: 'Δες τη μπύρα σου!'
 		},
 		result: {
 			title: 'Η μπύρα σου είναι:',
