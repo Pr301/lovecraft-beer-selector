@@ -19,7 +19,7 @@
 		{#if showBack}
 			<button
 				onclick={onback}
-				class="bg-brand-pink font-fredoka font-black text-lg px-6 py-2 rounded-full text-black"
+				class="bg-brand-pink font-fredoka font-black text-lg px-6 py-2 rounded-full text-white"
 			>
 				{backLabel}
 			</button>
