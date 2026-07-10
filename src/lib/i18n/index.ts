@@ -9,6 +9,15 @@ export const translations = {
 			langEn: 'English',
 			langGr: 'GReek',
 		},
+		mode: {
+			question: 'How do you want to find your beer?',
+			options: {
+				quiz: { label: 'Questionnaire', desc: 'Answer a questionnaire' },
+				country: { label: 'Country', desc: 'Select by country' },
+				style: { label: 'Style', desc: 'Select by style of beer' },
+				random: { label: 'Random', desc: 'Let RNG decide' },
+			},
+		},
 		q1: {
 			question: 'What kind of beer do you like?',
 			options: {
@@ -48,6 +57,15 @@ export const translations = {
 			cta: 'GO!',
 			langEn: 'English',
 			langGr: 'GReek',
+		},
+		mode: {
+			question: 'Πώς θέλεις να βρεις την μπύρα σου;',
+			options: {
+				quiz: { label: 'Ερωτηματολόγιο', desc: 'Απάντησε σε ένα ερωτηματολόγιο' },
+				country: { label: 'Χώρα', desc: 'Διάλεξε με βάση τη χώρα' },
+				style: { label: 'Στυλ', desc: 'Διάλεξε με βάση το στυλ μπύρας' },
+				random: { label: 'Τυχαία', desc: 'Άσε την τύχη να αποφασίσει' },
+			},
 		},
 		q1: {
 			question: 'Τι είδος μπύρας σου αρέσει;',
