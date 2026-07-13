@@ -8,5 +8,13 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false;
     }
+
+    // BA style guideline reference data (SRM/OG/IBU/ABV/description per style),
+    // used as a generic fallback when a specific beer is missing a datapoint.
+    // Writes only happen via scripts/migrate-ba-styles-to-firestore.mjs.
+    match /styleGuidelines/{styleId} {
+      allow read: if true;
+      allow write: if false;
+    }
   }
 }
