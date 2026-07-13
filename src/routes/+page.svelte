@@ -188,7 +188,7 @@
 				</div>
 			{:else if step === 1}
 				<!-- Mode selection: how do you want to find your beer? -->
-				<QuestionLayout onback={() => goTo(0, -1)} backLabel={t.back} {locale} onlocale={(l) => (locale = l)}>
+				<QuestionLayout onback={() => goTo(0, -1)} backLabel={t.back} onhome={reset} homeLabel={t.home} {locale} onlocale={(l) => (locale = l)}>
 					<div class="w-full max-w-xl mx-auto flex flex-col gap-4">
 						<h2
 							class="font-fredoka font-black text-brand-pink text-center shrink-0"
@@ -218,7 +218,7 @@
 				</QuestionLayout>
 			{:else if step === 2}
 				<!-- Q1: What kind of beer do you like? -->
-				<QuestionLayout onback={() => goTo(1, -1)} backLabel={t.back} {locale} onlocale={(l) => (locale = l)}>
+				<QuestionLayout onback={() => goTo(1, -1)} backLabel={t.back} onhome={reset} homeLabel={t.home} {locale} onlocale={(l) => (locale = l)}>
 					<div class="w-full max-w-xl mx-auto flex flex-col gap-4">
 						<h2
 							class="font-fredoka font-black text-brand-pink text-center shrink-0"
@@ -243,7 +243,7 @@
 				</QuestionLayout>
 			{:else if step === 3}
 				<!-- Q2: Beer color -->
-				<QuestionLayout onback={() => goTo(2, -1)} backLabel={t.back} {locale} onlocale={(l) => (locale = l)}>
+				<QuestionLayout onback={() => goTo(2, -1)} backLabel={t.back} onhome={reset} homeLabel={t.home} {locale} onlocale={(l) => (locale = l)}>
 					<div class="w-full max-w-xl mx-auto flex flex-col gap-3">
 						<h2
 							class="font-fredoka font-black text-brand-pink text-center shrink-0"
@@ -263,7 +263,7 @@
 				</QuestionLayout>
 			{:else if step === 4}
 				<!-- Q3: ABV strength -->
-				<QuestionLayout onback={() => goTo(3, -1)} backLabel={t.back} {locale} onlocale={(l) => (locale = l)}>
+				<QuestionLayout onback={() => goTo(3, -1)} backLabel={t.back} onhome={reset} homeLabel={t.home} {locale} onlocale={(l) => (locale = l)}>
 					<div class="w-full max-w-xl mx-auto flex flex-col gap-6">
 						<h2
 							class="font-fredoka font-black text-center shrink-0"
@@ -292,7 +292,7 @@
 				</QuestionLayout>
 			{:else if step === 5}
 				<!-- Q4: Country -->
-				<QuestionLayout onback={() => goTo(mode === 'country' ? 1 : 4, -1)} backLabel={t.back} {locale} onlocale={(l) => (locale = l)}>
+				<QuestionLayout onback={() => goTo(mode === 'country' ? 1 : 4, -1)} backLabel={t.back} onhome={reset} homeLabel={t.home} {locale} onlocale={(l) => (locale = l)}>
 					<div class="w-full max-w-xl mx-auto flex flex-col gap-6">
 						<h2
 							class="font-fredoka font-black text-brand-pink text-center shrink-0"
@@ -332,7 +332,7 @@
 				</QuestionLayout>
 			{:else if step === 7}
 				<!-- Random: choose how to pick -->
-				<QuestionLayout onback={() => goTo(1, -1)} backLabel={t.back} {locale} onlocale={(l) => (locale = l)}>
+				<QuestionLayout onback={() => goTo(1, -1)} backLabel={t.back} onhome={reset} homeLabel={t.home} {locale} onlocale={(l) => (locale = l)}>
 					<div class="w-full max-w-xl mx-auto flex flex-col gap-4">
 						<h2
 							class="font-fredoka font-black text-brand-pink text-center shrink-0"
@@ -362,7 +362,7 @@
 				</QuestionLayout>
 			{:else if step === 8}
 				<!-- Random: slot machine (decorative picture only) -->
-				<QuestionLayout onback={() => goTo(7, -1)} backLabel={t.back} {locale} onlocale={(l) => (locale = l)}>
+				<QuestionLayout onback={() => goTo(7, -1)} backLabel={t.back} onhome={reset} homeLabel={t.home} {locale} onlocale={(l) => (locale = l)}>
 					<div class="w-full max-w-xl mx-auto flex flex-col items-center gap-6">
 						<h2
 							class="font-fredoka font-black text-brand-pink text-center shrink-0"
@@ -385,7 +385,7 @@
 				</QuestionLayout>
 			{:else if step === 9}
 				<!-- Random: roll a d20 for one of 20 taps -->
-				<QuestionLayout onback={() => goTo(7, -1)} backLabel={t.back} {locale} onlocale={(l) => (locale = l)}>
+				<QuestionLayout onback={() => goTo(7, -1)} backLabel={t.back} onhome={reset} homeLabel={t.home} {locale} onlocale={(l) => (locale = l)}>
 					<div class="w-full max-w-xl mx-auto flex flex-col items-center gap-6">
 						<h2
 							class="font-fredoka font-black text-brand-pink text-center shrink-0"
@@ -426,6 +426,8 @@
 				<QuestionLayout
 					onback={() => goTo(mode === 'random' ? 7 : mode === 'style' ? 2 : 5, -1)}
 					backLabel={t.back}
+					onhome={reset}
+					homeLabel={t.home}
 					{locale}
 					onlocale={(l) => (locale = l)}
 				>

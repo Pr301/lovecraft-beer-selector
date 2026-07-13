@@ -3,6 +3,7 @@ export type Locale = 'en' | 'gr';
 export const translations = {
 	en: {
 		back: 'back',
+		home: 'Home',
 		landing: {
 			title: "Let's\nFind your\nBeer",
 			cta: 'GO!',
@@ -102,6 +103,7 @@ export const translations = {
 	},
 	gr: {
 		back: 'πίσω',
+		home: 'Αρχική',
 		landing: {
 			title: 'Ας\nβρούμε την\nμπύρα σου',
 			cta: 'GO!',
