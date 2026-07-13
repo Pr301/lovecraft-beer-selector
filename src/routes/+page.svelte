@@ -8,7 +8,7 @@
 	import BeerCard from '$lib/components/BeerCard.svelte';
 	import { translations } from '$lib/i18n';
 	import type { Locale } from '$lib/i18n';
-	import { beers, filterBeer, loadBeers } from '$lib/data/beers';
+	import { beers, filterBeer, loadBeers, countByType } from '$lib/data/beers';
 	import type { Beer, TypeId, ColorId, AbvId, CountryId, CityId } from '$lib/data/beers';
 
 	type Mode = 'quiz' | 'country' | 'style' | 'random';
@@ -43,6 +43,8 @@
 
 	let t = $derived(translations[locale]);
 	let result = $derived(mode === 'random' && randomBeer ? randomBeer : filterBeer(answers));
+	// Recomputes once beersReady flips true (beers[] is populated by then).
+	let typeCounts = $derived(beersReady ? countByType() : null);
 
 	const TYPE_OPTIONS: TypeId[] = ['aromatic', 'bitter', 'fruity', 'gluten-free', 'crispy', 'wheat'];
 	const MODE_OPTIONS: { id: Mode; emoji: string }[] = [
@@ -285,9 +287,16 @@
 											answers.type = typeId;
 											goTo(mode === 'style' ? 6 : 3);
 										}}
-										class="bg-brand-green font-fredoka font-black text-2xl text-black py-4 rounded-2xl leading-tight"
+										class="relative bg-brand-green font-fredoka font-black text-2xl text-black py-4 rounded-2xl leading-tight flex items-center justify-center"
 									>
-										{t.q1.options[typeId]}
+										<span>{t.q1.options[typeId]}</span>
+										{#if typeCounts}
+											<span
+												class="absolute right-2.5 top-1/2 -translate-y-1/2 grid place-items-center w-8 h-8 rounded-full bg-brand-pink text-white text-xs"
+											>
+												{typeCounts[typeId]}
+											</span>
+										{/if}
 									</button>
 								{/each}
 							</div>

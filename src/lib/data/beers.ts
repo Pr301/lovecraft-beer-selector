@@ -337,6 +337,23 @@ export async function loadBeers(): Promise<Beer[]> {
 	return beers;
 }
 
+// How many loaded beers carry each questionnaire type (multi-tag, so the totals
+// overlap and sum to more than beers.length). Used to badge the q1 options.
+export function countByType(): Record<TypeId, number> {
+	const counts: Record<TypeId, number> = {
+		aromatic: 0,
+		bitter: 0,
+		fruity: 0,
+		'gluten-free': 0,
+		crispy: 0,
+		wheat: 0
+	};
+	for (const b of beers) {
+		for (const t of b.types) counts[t]++;
+	}
+	return counts;
+}
+
 function abvInRange(abv: number, range: AbvId): boolean {
 	switch (range) {
 		case '0':
