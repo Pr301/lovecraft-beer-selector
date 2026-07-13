@@ -9,13 +9,17 @@ The file is **generated** — do not hand-edit `beers-enriched.json`. Edit the s
 [`scripts/build-beers-enriched.mjs`](../scripts/build-beers-enriched.mjs) and run
 `npm run generate:beers` (alias for `node scripts/build-beers-enriched.mjs`). The generator holds
 compact, brewery-grouped source data, derives `color`/`flavor` defaults from the style, computes id
-slugs, and self-validates on every run. It writes **two** identical copies: this standalone research
-file, and `src/lib/data/beers-catalog.json`.
+slugs, and self-validates on every run.
+
+After regenerating, re-run `node scripts/migrate-beers-to-firestore.mjs` to push the updated records
+into the `beers` Firestore collection (doc ID = beer `id`) — that collection, not this file, is what
+the running app reads.
 
 ## App integration
 
-The app **consumes this data**. `src/lib/data/beers.ts` imports `beers-catalog.json` and maps each
-record into the app's `Beer` shape: it slugs `country` (e.g. `Scotland (UK)` → `uk`, unidentified →
+The app reads from **Firestore**, not this file directly. `src/lib/data/beers.ts`'s `loadBeers()`
+fetches the `beers` collection (seeded from this file via `scripts/migrate-beers-to-firestore.mjs`)
+and maps each record into the app's `Beer` shape: it slugs `country` (e.g. `Scotland (UK)` → `uk`, unidentified →
 `other`) onto the expanded `CountryId` union + `countryMeta`, slugs `city` onto the 13 Greek cities
 the map now offers (athens, thessaloniki, heraklion, serres, evia, corfu, chios, attica,
 folegandros, patras, rethymno, samothraki, chalkidiki), falls back `color: null` → `blonde-ale`, and

@@ -18,8 +18,7 @@ import { dirname, join } from 'node:path';
 import { baGuidelineFor } from './ba-style-guidelines.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = join(ROOT, 'static', 'beers-enriched.json'); // standalone research deliverable
-const APP_OUT = join(ROOT, 'src', 'lib', 'data', 'beers-catalog.json'); // consumed by the app
+const OUT = join(ROOT, 'static', 'beers-enriched.json'); // standalone research deliverable; migrated into Firestore via scripts/migrate-beers-to-firestore.mjs
 
 const COLORS = new Set([
 	'pale-lager',
@@ -950,11 +949,10 @@ for (const b of out) {
 
 const json = JSON.stringify(out, null, 2) + '\n';
 writeFileSync(OUT, json);
-writeFileSync(APP_OUT, json);
 const byConf = out.reduce((a, b) => ((a[b.confidence] = (a[b.confidence] || 0) + 1), a), {});
 const byCountry = out.reduce((a, b) => ((a[b.country] = (a[b.country] || 0) + 1), a), {});
 const withGuideline = out.filter((b) => b.style_guideline).length;
-console.log('wrote', out.length, 'beers to', OUT, 'and', APP_OUT);
+console.log('wrote', out.length, 'beers to', OUT);
 console.log('confidence:', JSON.stringify(byConf));
 console.log('countries:', JSON.stringify(byCountry));
 console.log('BA style guideline matched:', withGuideline, '/', out.length);

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import QuestionLayout from '$lib/components/QuestionLayout.svelte';
 	import BeerGlass from '$lib/components/BeerGlass.svelte';
@@ -7,10 +8,23 @@
 	import BeerCard from '$lib/components/BeerCard.svelte';
 	import { translations } from '$lib/i18n';
 	import type { Locale } from '$lib/i18n';
-	import { beers, filterBeer } from '$lib/data/beers';
+	import { beers, filterBeer, loadBeers } from '$lib/data/beers';
 	import type { Beer, TypeId, ColorId, AbvId, CountryId, CityId } from '$lib/data/beers';
 
 	type Mode = 'quiz' | 'country' | 'style' | 'random';
+
+	let beersReady = $state(false);
+	let loadError = $state<string | null>(null);
+
+	onMount(() => {
+		loadBeers()
+			.then(() => {
+				beersReady = true;
+			})
+			.catch((e) => {
+				loadError = e instanceof Error ? e.message : String(e);
+			});
+	});
 
 	let step = $state(0);
 	let direction = $state(1);
@@ -99,6 +113,15 @@
 </script>
 
 <div class="relative overflow-hidden bg-white" style="height: 100dvh">
+	{#if loadError}
+		<div class="h-full flex items-center justify-center px-6 text-center">
+			<p class="font-fredoka font-black text-brand-pink">Failed to load beers: {loadError}</p>
+		</div>
+	{:else if !beersReady}
+		<div class="h-full flex items-center justify-center">
+			<span class="text-6xl animate-bounce">🍺</span>
+		</div>
+	{:else}
 	{#key step}
 		<div
 			class="absolute inset-0 overflow-hidden"
@@ -423,4 +446,5 @@
 			{/if}
 		</div>
 	{/key}
+	{/if}
 </div>

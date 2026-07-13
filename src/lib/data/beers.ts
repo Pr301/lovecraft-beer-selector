@@ -1,4 +1,5 @@
-import rawCatalog from './beers-catalog.json';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '$lib/firebase';
 
 export type TypeId = 'aromatic' | 'bitter' | 'fruity' | 'gluten-free' | 'crispy' | 'wheat';
 export type ColorId =
@@ -113,10 +114,11 @@ export const countryMeta: Record<CountryId, { name: string; flag: string }> = {
 };
 
 // ---------------------------------------------------------------------------
-// Catalog: the enriched cellar list (static/beers-enriched.json, mirrored to
-// beers-catalog.json by scripts/build-beers-enriched.mjs) mapped into the app's
-// Beer shape. The enriched data uses free-text country/city and has no `type`,
-// so we slug the origin and derive the questionnaire `type` here.
+// Catalog: docs in the Firestore `beers` collection (seeded from
+// static/beers-enriched.json via scripts/migrate-beers-to-firestore.mjs)
+// mapped into the app's Beer shape. The source data uses free-text
+// country/city and has no `type`, so we slug the origin and derive the
+// questionnaire `type` here.
 // ---------------------------------------------------------------------------
 interface RawBeer {
 	id: string;
@@ -200,21 +202,33 @@ function deriveType(raw: RawBeer): TypeId {
 	return 'aromatic';
 }
 
-export const beers: Beer[] = (rawCatalog as RawBeer[]).map((raw) => ({
-	id: raw.id,
-	name: raw.name,
-	brewery: raw.brewery ?? 'Unknown',
-	style: raw.style,
-	abv: raw.abv ?? 0,
-	ibu: raw.ibu,
-	color: raw.color ?? 'blonde-ale',
-	country: countrySlug(raw.country),
-	city: citySlug(raw.city),
-	type: deriveType(raw),
-	flavor: raw.flavor,
-	notes: raw.notes || undefined,
-	styleGuideline: raw.style_guideline ?? undefined
-}));
+function mapRawBeer(raw: RawBeer): Beer {
+	return {
+		id: raw.id,
+		name: raw.name,
+		brewery: raw.brewery ?? 'Unknown',
+		style: raw.style,
+		abv: raw.abv ?? 0,
+		ibu: raw.ibu,
+		color: raw.color ?? 'blonde-ale',
+		country: countrySlug(raw.country),
+		city: citySlug(raw.city),
+		type: deriveType(raw),
+		flavor: raw.flavor,
+		notes: raw.notes || undefined,
+		styleGuideline: raw.style_guideline ?? undefined
+	};
+}
+
+// Populated at runtime by loadBeers() from the `beers` Firestore collection
+// (seeded by scripts/migrate-beers-to-firestore.mjs). Empty until then.
+export let beers: Beer[] = [];
+
+export async function loadBeers(): Promise<Beer[]> {
+	const snapshot = await getDocs(collection(db, 'beers'));
+	beers = snapshot.docs.map((doc) => mapRawBeer(doc.data() as RawBeer));
+	return beers;
+}
 
 function abvInRange(abv: number, range: AbvId): boolean {
 	switch (range) {

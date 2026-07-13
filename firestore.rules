@@ -1,0 +1,12 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Beer catalog is public read-only reference data.
+    // Writes only happen via the admin migration script (scripts/migrate-beers-to-firestore.mjs).
+    match /beers/{beerId} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}
