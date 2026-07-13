@@ -15,6 +15,7 @@
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { baGuidelineFor } from './ba-style-guidelines.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'static', 'beers-enriched.json'); // standalone research deliverable
@@ -932,7 +933,8 @@ for (const group of Object.values(DATA)) {
 			image: null,
 			notes: [meta.notes, opts.notes].filter(Boolean).join(' ') || '',
 			confidence: opts.conf || meta.conf,
-			source: opts.src || meta.src
+			source: opts.src || meta.src,
+			style_guideline: baGuidelineFor(style)
 		});
 	}
 }
@@ -951,6 +953,8 @@ writeFileSync(OUT, json);
 writeFileSync(APP_OUT, json);
 const byConf = out.reduce((a, b) => ((a[b.confidence] = (a[b.confidence] || 0) + 1), a), {});
 const byCountry = out.reduce((a, b) => ((a[b.country] = (a[b.country] || 0) + 1), a), {});
+const withGuideline = out.filter((b) => b.style_guideline).length;
 console.log('wrote', out.length, 'beers to', OUT, 'and', APP_OUT);
 console.log('confidence:', JSON.stringify(byConf));
 console.log('countries:', JSON.stringify(byCountry));
+console.log('BA style guideline matched:', withGuideline, '/', out.length);

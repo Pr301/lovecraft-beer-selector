@@ -69,6 +69,32 @@ Each array element:
 | `notes`       | string                  | provenance / caveats |
 | `confidence`  | `high` \| `medium` \| `low` | how sure the derived data is |
 | `source`      | string                  | a URL when web-verified, else `name+list` / `name+knowledge` |
+| `style_guideline` | object \| `null`    | reference stats from the Brewers Association Beer Style Guidelines (see below) |
+
+### `style_guideline`
+
+Each beer's `style` string is mapped (see `STYLE_TO_BA` in
+[`scripts/ba-style-guidelines.mjs`](../scripts/ba-style-guidelines.mjs)) onto the closest
+matching style family from the [Brewers Association Beer Style
+Guidelines](https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/).
+`null` for the ~7 entries the BA guidelines don't cover (ciders, radlers). Shape:
+
+```ts
+{
+  key: string;          // slug, e.g. "american-ipa"
+  name: string;         // BA style name, e.g. "American-Style India Pale Ale"
+  category: string;     // e.g. "Ale - North American"
+  srm: string;          // color range
+  og: string;           // original gravity range
+  ibu: string;          // bitterness range
+  abv: string;          // alcohol by volume range
+  description: string;  // short paraphrased character summary
+}
+```
+
+370/377 beers have a match. The mapping is a best-effort approximation — many craft
+one-offs don't map onto a single official BA style — so treat it as a reference range,
+not a certified spec.
 
 ### `color` vocabulary
 

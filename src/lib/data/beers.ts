@@ -45,6 +45,17 @@ export type CityId =
 	| 'chalkidiki';
 export type AbvId = '0' | '4' | '5' | '6-8' | '9-10' | '11+';
 
+export interface StyleGuideline {
+	key: string;
+	name: string;
+	category: string;
+	srm: string;
+	og: string;
+	ibu: string;
+	abv: string;
+	description: string;
+}
+
 export interface Beer {
 	id: string;
 	name: string;
@@ -58,6 +69,7 @@ export interface Beer {
 	type: TypeId;
 	flavor: string[];
 	notes?: string;
+	styleGuideline?: StyleGuideline;
 }
 
 export interface Answers {
@@ -119,6 +131,7 @@ interface RawBeer {
 	flavor: string[];
 	gluten_free: boolean | null;
 	notes: string;
+	style_guideline: StyleGuideline | null;
 }
 
 const COUNTRY_SLUG: Record<string, CountryId> = {
@@ -199,7 +212,8 @@ export const beers: Beer[] = (rawCatalog as RawBeer[]).map((raw) => ({
 	city: citySlug(raw.city),
 	type: deriveType(raw),
 	flavor: raw.flavor,
-	notes: raw.notes || undefined
+	notes: raw.notes || undefined,
+	styleGuideline: raw.style_guideline ?? undefined
 }));
 
 function abvInRange(abv: number, range: AbvId): boolean {

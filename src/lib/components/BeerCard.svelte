@@ -34,8 +34,23 @@
 			<div class="flex-1 text-center py-3">
 				<span class="font-black text-sm">{beer.ibu} IBU</span>
 			</div>
+		{:else if beer.styleGuideline}
+			<div class="flex-1 text-center py-3">
+				<span class="font-black text-sm">~{beer.styleGuideline.ibu} IBU</span>
+			</div>
 		{/if}
 	</div>
+
+	<!-- BA style guideline -->
+	{#if beer.styleGuideline}
+		<div class="mt-2 px-1">
+			<p class="text-gray-400 text-[11px] leading-snug">
+				<span class="font-bold text-gray-500">{beer.styleGuideline.name}</span>
+				&middot; {beer.styleGuideline.abv} ABV &middot; {beer.styleGuideline.ibu} IBU &middot; {beer
+					.styleGuideline.srm} SRM
+			</p>
+		</div>
+	{/if}
 
 	<!-- Color + Country -->
 	<div class="flex items-center gap-3 mt-3 px-1">
