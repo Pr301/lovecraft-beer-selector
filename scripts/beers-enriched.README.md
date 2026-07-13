@@ -6,7 +6,7 @@ This is the **full pass: 377 distinct beers** across ~65 breweries and 18 countr
 from ~447 source rows (the same beer recurs across packaging sizes and on the numbered tap board).
 
 The file is **generated** — do not hand-edit `beers-enriched.json`. Edit the source data in
-[`scripts/build-beers-enriched.mjs`](../scripts/build-beers-enriched.mjs) and run
+[`scripts/build-beers-enriched.mjs`](./build-beers-enriched.mjs) and run
 `npm run generate:beers` (alias for `node scripts/build-beers-enriched.mjs`). The generator holds
 compact, brewery-grouped source data, derives `color`/`flavor` defaults from the style, computes id
 slugs, and self-validates on every run.
@@ -23,8 +23,9 @@ and maps each record into the app's `Beer` shape: it slugs `country` (e.g. `Scot
 `other`) onto the expanded `CountryId` union + `countryMeta`, slugs `city` onto the 13 Greek cities
 the map now offers (athens, thessaloniki, heraklion, serres, evia, corfu, chios, attica,
 folegandros, patras, rethymno, samothraki, chalkidiki), falls back `color: null` → `blonde-ale`, and
-derives the questionnaire `type` (`aromatic`/`bitter`/`fruity`/`gluten-free`/`crispy`/`wheat`) from
-style + flavour + gluten flag. `BeerCard` shows the `flavor` tags (there are no bilingual
+derives the questionnaire `types` (a multi-tag subset of
+`aromatic`/`bitter`/`fruity`/`gluten-free`/`crispy`/`wheat`) from the beer's BA style-guideline key
+(via `STYLE_KEY_TYPES`) plus the gluten flag. `BeerCard` shows the `flavor` tags (there are no bilingual
 descriptions), and the country/city maps (`scripts/generate-maps.mjs`) were regenerated with the
 European countries and Greek cities the list actually covers.
 
@@ -78,7 +79,7 @@ Each array element:
 ### `style_guideline`
 
 Each beer's `style` string is mapped (see `STYLE_TO_BA` in
-[`scripts/ba-style-guidelines.mjs`](../scripts/ba-style-guidelines.mjs)) onto the closest
+[`scripts/ba-style-guidelines.mjs`](./ba-style-guidelines.mjs)) onto the closest
 matching style family from the [Brewers Association Beer Style
 Guidelines](https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/).
 `null` for the ~7 entries the BA guidelines don't cover (ciders, radlers). Shape:
@@ -134,5 +135,5 @@ app is trivial: `pale-lager`, `blonde-ale`, `pale-ale-ipa`, `amber-ale`, `red-al
 ## Verification
 
 ```bash
-node -e "const b=require('./static/beers-enriched.json'); console.log('count', b.length); const ids=new Set(); b.forEach(x=>{ if(!x.id||!x.name||x.abv===undefined) throw new Error('missing keys: '+x.name); if(ids.has(x.id)) throw new Error('dup id: '+x.id); ids.add(x.id); if(!Array.isArray(x.flavor)||x.flavor.length<3) throw new Error('flavor<3: '+x.name); }); console.log('all valid, unique ids');"
+node -e "const b=require('./scripts/beers-enriched.json'); console.log('count', b.length); const ids=new Set(); b.forEach(x=>{ if(!x.id||!x.name||x.abv===undefined) throw new Error('missing keys: '+x.name); if(ids.has(x.id)) throw new Error('dup id: '+x.id); ids.add(x.id); if(!Array.isArray(x.flavor)||x.flavor.length<3) throw new Error('flavor<3: '+x.name); }); console.log('all valid, unique ids');"
 ```

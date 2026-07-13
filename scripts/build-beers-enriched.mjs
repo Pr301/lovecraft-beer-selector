@@ -1,9 +1,9 @@
-// Builds static/beers-enriched.json from compact, brewery-grouped source data.
+// Builds scripts/beers-enriched.json from compact, brewery-grouped source data.
 //
 // Source: ~/Downloads/BEER LIST.xls (extracted with `strings`), deduplicated across
 // packaging variants. Origin/city is a brewery-level property; beers inherit it.
 // Fields derived from beer name + knowledge, web-verified where a `src` URL is given.
-// Images are intentionally omitted this pass. See static/beers-enriched.README.md.
+// Images are intentionally omitted this pass. See scripts/beers-enriched.README.md.
 //
 // Run:  node scripts/build-beers-enriched.mjs
 //
@@ -17,8 +17,8 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { baGuidelineFor } from './ba-style-guidelines.mjs';
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = join(ROOT, 'static', 'beers-enriched.json'); // standalone research deliverable; migrated into Firestore via scripts/migrate-beers-to-firestore.mjs
+const HERE = dirname(fileURLToPath(import.meta.url));
+const OUT = join(HERE, 'beers-enriched.json'); // seed input for scripts/migrate-beers-to-firestore.mjs (not shipped to the client — Firestore is the app's source of truth)
 
 const COLORS = new Set([
 	'pale-lager',

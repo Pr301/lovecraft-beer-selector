@@ -1,4 +1,4 @@
-// One-time / re-runnable migration: uploads static/beers-enriched.json into the
+// One-time / re-runnable migration: uploads scripts/beers-enriched.json into the
 // `beers` Firestore collection (doc ID = beer id). Uses application-default
 // credentials, so run `gcloud auth application-default login` first if needed.
 import { readFile } from 'node:fs/promises';
@@ -9,7 +9,7 @@ import { getFirestore } from 'firebase-admin/firestore';
 
 const PROJECT_ID = 'lovecraft-beer-selector';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dataPath = path.join(__dirname, '..', 'static', 'beers-enriched.json');
+const dataPath = path.join(__dirname, 'beers-enriched.json');
 
 initializeApp({
 	credential: applicationDefault(),

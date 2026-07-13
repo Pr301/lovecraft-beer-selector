@@ -79,7 +79,7 @@ export interface Beer {
 	color: ColorId;
 	country: CountryId;
 	city?: string;
-	type: TypeId;
+	types: TypeId[];
 	flavor: string[];
 	notes?: string;
 	styleGuideline?: StyleGuideline;
@@ -126,11 +126,10 @@ export const countryMeta: Record<CountryId, { name: string; flag: string }> = {
 };
 
 // ---------------------------------------------------------------------------
-// Catalog: docs in the Firestore `beers` collection (seeded from
-// static/beers-enriched.json via scripts/migrate-beers-to-firestore.mjs)
-// mapped into the app's Beer shape. The source data uses free-text
-// country/city and has no `type`, so we slug the origin and derive the
-// questionnaire `type` here.
+// Catalog: docs in the Firestore `beers` collection (the single source of
+// truth; populated by scripts/migrate-beers-to-firestore.mjs) mapped into the
+// app's Beer shape. The source data uses free-text country/city and has no
+// `type`, so we slug the origin and derive the questionnaire `types` here.
 // ---------------------------------------------------------------------------
 interface RawBeer {
 	id: string;
@@ -201,17 +200,113 @@ function citySlug(city: string | null): string | undefined {
 	return s.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
-// Derive the questionnaire type from style + flavour + dietary flags (priority order).
-function deriveType(raw: RawBeer): TypeId {
-	if (raw.gluten_free) return 'gluten-free';
+// Curated map from BA style-guideline key -> questionnaire types. Beers can carry
+// several tags (a hazy IPA is aromatic AND fruity), so a beer surfaces for whichever
+// entry point the user picks. Covers every style key present in the catalog; the few
+// keyless beers (ciders/radlers) fall back to fallbackTypes(). `gluten-free` is applied
+// separately from the dietary flag, not from this table.
+const STYLE_KEY_TYPES: Record<string, TypeId[]> = {
+	// crispy — clean, light lager finish
+	'contemporary-american-lager': ['crispy'],
+	'international-pilsener': ['crispy'],
+	'german-pilsener': ['crispy'],
+	'munich-helles': ['crispy'],
+	'czech-pale-lager': ['crispy'],
+	'czech-dark-lager': ['crispy'],
+	'european-dark-lager': ['crispy'],
+	'india-pale-lager': ['crispy'],
+	'west-coast-pilsener': ['crispy'],
+	'german-marzen': ['crispy', 'aromatic'],
+	'non-alcohol-malt-beverage': ['crispy'],
+	// bitter — assertive hop or roast bitterness
+	'west-coast-ipa': ['bitter'],
+	'american-ipa': ['bitter'],
+	'imperial-double-ipa': ['bitter'],
+	'session-ipa': ['bitter'],
+	'american-barleywine': ['bitter'],
+	'american-strong-pale-ale': ['bitter'],
+	'imperial-red-ale': ['bitter'],
+	'american-belgo-ale': ['bitter'],
+	'british-ipa': ['bitter'],
+	'classic-english-pale-ale': ['bitter'],
+	'special-bitter-best-bitter': ['bitter'],
+	'american-imperial-stout': ['bitter'],
+	'american-stout': ['bitter'],
+	'export-stout': ['bitter'],
+	'classic-irish-dry-stout': ['bitter'],
+	'oatmeal-stout': ['bitter'],
+	'baltic-porter': ['bitter'],
+	'brown-porter': ['bitter'],
+	'american-imperial-porter': ['bitter'],
+	// aromatic — aroma-forward hops, Belgian esters, malt aroma
+	'juicy-hazy-ipa': ['aromatic', 'fruity'],
+	'juicy-hazy-pale-ale': ['aromatic', 'fruity'],
+	'hazy-imperial-double-ipa': ['bitter', 'aromatic', 'fruity'],
+	'american-pale-ale': ['aromatic', 'bitter'],
+	'amber-red-ale': ['aromatic'],
+	'irish-red-ale': ['aromatic'],
+	'english-brown-ale': ['aromatic'],
+	'belgian-tripel': ['aromatic', 'fruity'],
+	'belgian-dubbel': ['aromatic', 'fruity'],
+	'belgian-quadrupel': ['aromatic', 'fruity'],
+	'belgian-strong-dark-ale': ['aromatic', 'fruity'],
+	'belgian-strong-blonde': ['aromatic'],
+	'belgian-blonde': ['aromatic'],
+	'golden-blonde-ale': ['aromatic'],
+	'belgian-speciale-belge': ['aromatic'],
+	'specialty-saison': ['aromatic'],
+	'herb-spice-beer': ['aromatic'],
+	'specialty-honey-beer': ['aromatic'],
+	'smoke-beer': ['aromatic'],
+	'bamberg-bock-rauchbier': ['aromatic'],
+	'german-doppelbock': ['aromatic'],
+	'british-strong-ale': ['aromatic'],
+	'other-strong-ale-or-lager': ['aromatic'],
+	'aged-beer': ['aromatic'],
+	'sweet-cream-stout': ['aromatic'],
+	// fruity — sour / fruited / lambic / pastry / wild
+	'american-fruited-sour-ale': ['fruity'],
+	'belgian-fruit-lambic': ['fruity'],
+	'belgian-fruit-beer': ['fruity'],
+	'american-fruit-beer': ['fruity'],
+	'dessert-pastry-beer': ['fruity'],
+	'mixed-culture-brett-beer': ['fruity'],
+	'wild-beer': ['fruity'],
+	'contemporary-gose': ['fruity', 'wheat'],
+	'berliner-weisse': ['fruity', 'wheat'],
+	// wheat — wheat grain
+	'south-german-hefeweizen': ['wheat'],
+	'south-german-weizenbock': ['wheat'],
+	'south-german-dunkel-weizen': ['wheat'],
+	'belgian-witbier': ['wheat'],
+	// gluten-free
+	'gluten-free-beer': ['gluten-free']
+};
+
+// Fallback for the handful of beers with no BA style key (ciders/radlers): a trimmed
+// version of the old style+flavour regex, returning a single best-guess type.
+function fallbackTypes(raw: RawBeer): TypeId[] {
 	const s = (raw.style + ' ' + raw.flavor.join(' ')).toLowerCase();
-	if (/weiss|weizen|hefe|\bwit\b|witte|wheat|weiz/.test(s)) return 'wheat';
+	if (/weiss|weizen|hefe|\bwit\b|witte|wheat|weiz/.test(s)) return ['wheat'];
 	if (/sour|gose|lambic|kriek|framboise|cassis|cider|radler|fruit|cherry|berry|mango|peach|passion|raspberry|strawberry|apple|blueberry/.test(s))
-		return 'fruity';
+		return ['fruity'];
 	if (/stout|porter|imperial|barley\s?wine|barleywine|west coast|wcipa|\bdipa\b|\btipa\b|double ipa|triple ipa|quadruple|bitter|resinous/.test(s))
-		return 'bitter';
-	if (/pilsner|pilsener|\bpils\b|lager|helles|\bcrisp\b|clean/.test(s)) return 'crispy';
-	return 'aromatic';
+		return ['bitter'];
+	if (/pilsner|pilsener|\bpils\b|lager|helles|\bcrisp\b|clean/.test(s)) return ['crispy'];
+	return ['aromatic'];
+}
+
+// Derive the questionnaire types from the BA style key + dietary flag (multi-tag).
+function deriveTypes(raw: RawBeer): TypeId[] {
+	const tags = new Set<TypeId>();
+	if (raw.gluten_free) tags.add('gluten-free'); // dietary flag is authoritative
+	const key = raw.style_guideline?.key;
+	if (key && STYLE_KEY_TYPES[key]) {
+		for (const t of STYLE_KEY_TYPES[key]) tags.add(t);
+	} else {
+		for (const t of fallbackTypes(raw)) tags.add(t);
+	}
+	return tags.size ? [...tags] : ['aromatic'];
 }
 
 function mapRawBeer(raw: RawBeer): Beer {
@@ -225,7 +320,7 @@ function mapRawBeer(raw: RawBeer): Beer {
 		color: raw.color ?? 'blonde-ale',
 		country: countrySlug(raw.country),
 		city: citySlug(raw.city),
-		type: deriveType(raw),
+		types: deriveTypes(raw),
 		flavor: raw.flavor,
 		notes: raw.notes || undefined,
 		styleGuideline: raw.style_guideline ?? undefined
@@ -264,7 +359,7 @@ export function filterBeer(answers: Answers): Beer {
 
 	const exactWithCity = beers.find(
 		(b) =>
-			(!type || b.type === type) &&
+			(!type || b.types.includes(type)) &&
 			(!color || b.color === color) &&
 			(!abv || abvInRange(b.abv, abv)) &&
 			(!country || b.country === country) &&
@@ -274,7 +369,7 @@ export function filterBeer(answers: Answers): Beer {
 
 	const exact = beers.find(
 		(b) =>
-			(!type || b.type === type) &&
+			(!type || b.types.includes(type)) &&
 			(!color || b.color === color) &&
 			(!abv || abvInRange(b.abv, abv)) &&
 			(!country || b.country === country)
@@ -283,13 +378,15 @@ export function filterBeer(answers: Answers): Beer {
 
 	const noCountry = beers.find(
 		(b) =>
-			(!type || b.type === type) &&
+			(!type || b.types.includes(type)) &&
 			(!color || b.color === color) &&
 			(!abv || abvInRange(b.abv, abv))
 	);
 	if (noCountry) return noCountry;
 
-	const noColor = beers.find((b) => (!type || b.type === type) && (!abv || abvInRange(b.abv, abv)));
+	const noColor = beers.find(
+		(b) => (!type || b.types.includes(type)) && (!abv || abvInRange(b.abv, abv))
+	);
 	if (noColor) return noColor;
 
 	return beers[0];
