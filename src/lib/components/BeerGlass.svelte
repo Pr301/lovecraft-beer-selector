@@ -115,30 +115,35 @@
 	{#each BANDS as band, i (band.id)}
 		{@const disabled = isDisabled(band.id)}
 		{@const count = countFor(band.id)}
-		<polygon
-			points={bandPoints(i)}
-			fill={band.fill}
-			opacity={!selected || selected === band.id ? 1 : 0.55}
-			onclick={disabled ? undefined : () => onselect(band.id)}
-			role="button"
-			tabindex={disabled ? -1 : 0}
-			aria-label={band.label}
-			aria-disabled={disabled}
-			onkeydown={disabled ? undefined : (e) => e.key === 'Enter' && onselect(band.id)}
-			class={disabled ? 'cursor-not-allowed' : ''}
-		/>
-		{#if disabled}
-			<polygon points={bandPoints(i)} fill="url(#disabled-hatch-{band.id})" pointer-events="none" />
-		{/if}
-		<rect
-			x={W / 2 - labelHalfWidth(band.label) - 9}
-			y={bandMidY(i) - 14}
-			width={labelHalfWidth(band.label) * 2 + 18}
-			height="19"
-			rx="4"
-			fill={band.fill}
-			pointer-events="none"
-		/>
+		{@const dimmed = selected && selected !== band.id}
+		<!-- Group opacity composites polygon + hatch + label patch as one unit first,
+			so the overlap between them doesn't double-dim relative to a plain band. -->
+		<g opacity={dimmed ? 0.55 : 1}>
+			<polygon
+				points={bandPoints(i)}
+				fill={band.fill}
+				onclick={disabled ? undefined : () => onselect(band.id)}
+				role="button"
+				tabindex={disabled ? -1 : 0}
+				aria-label={band.label}
+				aria-disabled={disabled}
+				onkeydown={disabled ? undefined : (e) => e.key === 'Enter' && onselect(band.id)}
+				class={disabled ? 'cursor-not-allowed' : ''}
+			/>
+			{#if disabled}
+				<polygon points={bandPoints(i)} fill="url(#disabled-hatch-{band.id})" pointer-events="none" />
+				<rect
+					x={W / 2 - labelHalfWidth(band.label) - 9}
+					y={bandMidY(i) - 14}
+					width={labelHalfWidth(band.label) * 2 + 18}
+					height="19"
+					rx="4"
+					fill={band.fill}
+					pointer-events="none"
+				/>
+			{/if}
+		</g>
+
 		<text
 			x={W / 2}
 			y={bandMidY(i)}

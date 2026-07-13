@@ -293,6 +293,7 @@
 									<button
 										onclick={() => {
 											answers.type = typeId;
+											answers.color = '';
 											if (mode === 'style') {
 												goTo(6);
 												return;
