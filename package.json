@@ -12,7 +12,8 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
-		"generate:maps": "node scripts/generate-maps.mjs"
+		"generate:maps": "node scripts/generate-maps.mjs",
+		"generate:beers": "node scripts/build-beers-enriched.mjs"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",

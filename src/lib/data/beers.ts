@@ -1,3 +1,5 @@
+import rawCatalog from './beers-catalog.json';
+
 export type TypeId = 'aromatic' | 'bitter' | 'fruity' | 'gluten-free' | 'crispy' | 'wheat';
 export type ColorId =
 	| 'pale-lager'
@@ -9,8 +11,38 @@ export type ColorId =
 	| 'porter'
 	| 'stout';
 export type CountryId =
-	'greece' | 'germany' | 'belgium' | 'usa' | 'uk' | 'japan' | 'mexico' | 'australia';
-export type CityId = 'athens' | 'thessaloniki' | 'heraklion';
+	| 'greece'
+	| 'germany'
+	| 'belgium'
+	| 'netherlands'
+	| 'czech'
+	| 'poland'
+	| 'bulgaria'
+	| 'hungary'
+	| 'latvia'
+	| 'sweden'
+	| 'austria'
+	| 'italy'
+	| 'uk'
+	| 'ireland'
+	| 'usa'
+	| 'mexico'
+	| 'cyprus'
+	| 'other';
+export type CityId =
+	| 'athens'
+	| 'thessaloniki'
+	| 'heraklion'
+	| 'serres'
+	| 'evia'
+	| 'corfu'
+	| 'chios'
+	| 'attica'
+	| 'folegandros'
+	| 'patras'
+	| 'rethymno'
+	| 'samothraki'
+	| 'chalkidiki';
 export type AbvId = '0' | '4' | '5' | '6-8' | '9-10' | '11+';
 
 export interface Beer {
@@ -19,12 +51,13 @@ export interface Beer {
 	brewery: string;
 	style: string;
 	abv: number;
-	ibu: number;
+	ibu: number | null;
 	color: ColorId;
 	country: CountryId;
-	city?: CityId;
+	city?: string;
 	type: TypeId;
-	description: { en: string; gr: string };
+	flavor: string[];
+	notes?: string;
 }
 
 export interface Answers {
@@ -50,168 +83,124 @@ export const countryMeta: Record<CountryId, { name: string; flag: string }> = {
 	greece: { name: 'Greece', flag: '🇬🇷' },
 	germany: { name: 'Germany', flag: '🇩🇪' },
 	belgium: { name: 'Belgium', flag: '🇧🇪' },
-	usa: { name: 'USA', flag: '🇺🇸' },
+	netherlands: { name: 'Netherlands', flag: '🇳🇱' },
+	czech: { name: 'Czech Republic', flag: '🇨🇿' },
+	poland: { name: 'Poland', flag: '🇵🇱' },
+	bulgaria: { name: 'Bulgaria', flag: '🇧🇬' },
+	hungary: { name: 'Hungary', flag: '🇭🇺' },
+	latvia: { name: 'Latvia', flag: '🇱🇻' },
+	sweden: { name: 'Sweden', flag: '🇸🇪' },
+	austria: { name: 'Austria', flag: '🇦🇹' },
+	italy: { name: 'Italy', flag: '🇮🇹' },
 	uk: { name: 'UK', flag: '🇬🇧' },
-	japan: { name: 'Japan', flag: '🇯🇵' },
+	ireland: { name: 'Ireland', flag: '🇮🇪' },
+	usa: { name: 'USA', flag: '🇺🇸' },
 	mexico: { name: 'Mexico', flag: '🇲🇽' },
-	australia: { name: 'Australia', flag: '🇦🇺' }
+	cyprus: { name: 'Cyprus', flag: '🇨🇾' },
+	other: { name: 'Other', flag: '🍺' }
 };
 
-export const beers: Beer[] = [
-	{
-		id: 'magissa',
-		name: 'Magissa (Μάγισσα)',
-		brewery: 'KVLT Brewing Society',
-		style: 'IPA - New England / Hazy',
-		abv: 7,
-		ibu: 40,
-		color: 'blonde-ale',
-		country: 'greece',
-		city: 'athens',
-		type: 'aromatic',
-		description: {
-			en: 'A trippy IPA. Hazy, juicy with medium carbonation levels for a silky and creamy mouthfeel. Mosaic and Azacca hops are responsible for the intense mango, pineapple, piney/herbal fragrance and for the balanced bitterness.',
-			gr: 'Μια ψυχεδελική IPA. Θολή, ζουμερή με μέτρια ανθράκωση για μεταξένια και κρεμώδη αίσθηση. Λυκίσκοι Mosaic και Azacca δίνουν έντονο άρωμα μάνγκο, ανανά και βοτάνων με ισορροπημένη πικράδα.'
-		}
-	},
-	{
-		id: 'golden-tentacle',
-		name: 'Golden Tentacle',
-		brewery: 'Lovecraft Beers',
-		style: 'Blonde Ale',
-		abv: 5,
-		ibu: 18,
-		color: 'blonde-ale',
-		country: 'greece',
-		city: 'thessaloniki',
-		type: 'crispy',
-		description: {
-			en: 'A light and refreshing blonde ale with a crisp finish. Notes of honey and light citrus with a clean, dry aftertaste.',
-			gr: 'Μια ελαφριά και δροσερή ξανθιά μπύρα με τραγανή επίγευση. Νότες μελιού και ελαφριών εσπεριδοειδών.'
-		}
-	},
-	{
-		id: 'deep-amber',
-		name: 'Deep Amber',
-		brewery: 'Lovecraft Beers',
-		style: 'Amber Ale',
-		abv: 6,
-		ibu: 30,
-		color: 'amber-ale',
-		country: 'greece',
-		city: 'heraklion',
-		type: 'bitter',
-		description: {
-			en: 'A rich amber ale with a well-balanced malt and hop profile. Caramel sweetness with a pleasantly bitter finish.',
-			gr: 'Μια πλούσια κεχριμπαρένια μπύρα με ισορροπημένο προφίλ βύνης και λυκίσκου. Καραμελένια γλύκα με ευχάριστα πικρή επίγευση.'
-		}
-	},
-	{
-		id: 'wheat-kraken',
-		name: 'Wheat Kraken',
-		brewery: 'Lovecraft Beers',
-		style: 'Hefeweizen',
-		abv: 5,
-		ibu: 12,
-		color: 'pale-ale-ipa',
-		country: 'germany',
-		type: 'wheat',
-		description: {
-			en: 'A classic German-style wheat beer with banana and clove aromas. Smooth, cloudy, and refreshing with a soft mouthfeel.',
-			gr: 'Μια κλασική γερμανική σιταρένια μπύρα με αρώματα μπανάνας και γαρίφαλου. Απαλή, θολή και δροσιστική.'
-		}
-	},
-	{
-		id: 'berry-abomination',
-		name: 'Berry Abomination',
-		brewery: 'Lovecraft Beers',
-		style: 'Fruit Sour',
-		abv: 4,
-		ibu: 10,
-		color: 'red-ale',
-		country: 'belgium',
-		type: 'fruity',
-		description: {
-			en: 'A wild, fruit-forward sour bursting with raspberry and blackberry. Tart, refreshing, and dangerously drinkable.',
-			gr: 'Μια άγρια, φρουτένια ξινή μπύρα γεμάτη βατόμουρο και σμέουρο. Ξινή, δροσιστική και επικίνδυνα εύπιωτη.'
-		}
-	},
-	{
-		id: 'cosmic-stout',
-		name: 'Cosmic Stout',
-		brewery: 'Lovecraft Beers',
-		style: 'Imperial Stout',
-		abv: 11,
-		ibu: 55,
-		color: 'stout',
-		country: 'uk',
-		type: 'bitter',
-		description: {
-			en: 'A bold imperial stout with notes of dark chocolate, espresso, and roasted malts. Rich, warming, and intensely complex.',
-			gr: 'Μια τολμηρή imperial stout με νότες μαύρης σοκολάτας, εσπρέσο και καβουρδισμένης βύνης. Πλούσια, ζεστή και εντυπωσιακά σύνθετη.'
-		}
-	},
-	{
-		id: 'gluten-ghost',
-		name: 'Gluten Ghost',
-		brewery: 'Lovecraft Beers',
-		style: 'Gluten-Free Lager',
-		abv: 4,
-		ibu: 15,
-		color: 'pale-lager',
-		country: 'usa',
-		type: 'gluten-free',
-		description: {
-			en: "A crisp, clean gluten-free lager that proves free-from doesn't mean flavour-free. Light and refreshing with a smooth finish.",
-			gr: 'Μια τραγανή, καθαρή μπύρα χωρίς γλουτένη που αποδεικνύει ότι χωρίς γλουτένη δε σημαίνει χωρίς γεύση.'
-		}
-	},
-	{
-		id: 'sunken-torii',
-		name: 'Sunken Torii',
-		brewery: 'Lovecraft Beers',
-		style: 'Rice Lager',
-		abv: 5,
-		ibu: 12,
-		color: 'pale-lager',
-		country: 'japan',
-		type: 'crispy',
-		description: {
-			en: 'An ultra-clean rice lager brewed in the shadow of drowned shrines. Delicate, dry and crisp with a whisper of jasmine and an abyssally smooth finish.',
-			gr: 'Μια πεντακάθαρη rice lager φτιαγμένη στη σκιά βυθισμένων ναών. Ντελικάτη, ξηρή και τραγανή με μια ιδέα γιασεμιού και απύθμενα απαλή επίγευση.'
-		}
-	},
-	{
-		id: 'aztec-abyss',
-		name: 'Aztec Abyss',
-		brewery: 'Lovecraft Beers',
-		style: 'Vienna Lager',
-		abv: 5,
-		ibu: 22,
-		color: 'amber-ale',
-		country: 'mexico',
-		type: 'aromatic',
-		description: {
-			en: 'A copper-hued Vienna lager from forgotten temple cellars. Toasted malt, subtle caramel and a faint echo of cacao rising from the deep.',
-			gr: 'Μια χάλκινη Vienna lager από ξεχασμένα κελάρια ναών. Καβουρδισμένη βύνη, διακριτική καραμέλα και ένας αμυδρός απόηχος κακάο από τα βάθη.'
-		}
-	},
-	{
-		id: 'southern-shoggoth',
-		name: 'Southern Shoggoth',
-		brewery: 'Lovecraft Beers',
-		style: 'Australian Pale Ale',
-		abv: 6,
-		ibu: 35,
-		color: 'pale-ale-ipa',
-		country: 'australia',
-		type: 'fruity',
-		description: {
-			en: 'A shape-shifting pale ale bursting with Galaxy hops. Passionfruit, peach and citrus tentacles wrap around a bright, juicy body.',
-			gr: 'Μια μεταμορφική pale ale γεμάτη λυκίσκο Galaxy. Πλοκάμια από φρούτο του πάθους, ροδάκινο και εσπεριδοειδή τυλίγουν ένα φωτεινό, ζουμερό σώμα.'
-		}
-	}
+// ---------------------------------------------------------------------------
+// Catalog: the enriched cellar list (static/beers-enriched.json, mirrored to
+// beers-catalog.json by scripts/build-beers-enriched.mjs) mapped into the app's
+// Beer shape. The enriched data uses free-text country/city and has no `type`,
+// so we slug the origin and derive the questionnaire `type` here.
+// ---------------------------------------------------------------------------
+interface RawBeer {
+	id: string;
+	name: string;
+	brewery: string | null;
+	style: string;
+	abv: number | null;
+	ibu: number | null;
+	country: string | null;
+	city: string | null;
+	color: ColorId | null;
+	flavor: string[];
+	gluten_free: boolean | null;
+	notes: string;
+}
+
+const COUNTRY_SLUG: Record<string, CountryId> = {
+	Greece: 'greece',
+	Germany: 'germany',
+	Belgium: 'belgium',
+	Netherlands: 'netherlands',
+	'Czech Republic': 'czech',
+	Poland: 'poland',
+	Bulgaria: 'bulgaria',
+	Hungary: 'hungary',
+	Latvia: 'latvia',
+	Sweden: 'sweden',
+	Austria: 'austria',
+	Italy: 'italy',
+	'Scotland (UK)': 'uk',
+	'England (UK)': 'uk',
+	Ireland: 'ireland',
+	USA: 'usa',
+	Mexico: 'mexico',
+	Cyprus: 'cyprus'
+};
+
+function countrySlug(country: string | null): CountryId {
+	if (!country) return 'other';
+	return COUNTRY_SLUG[country] ?? 'other';
+}
+
+// Map free-text city onto the cities the questionnaire's Greece map offers (CityId);
+// anything else keeps a generic slug (still filterable by country, just not by city).
+const CITY_MATCHERS: [needle: string, id: CityId][] = [
+	['athens', 'athens'],
+	['thessaloniki', 'thessaloniki'],
+	['heraklion', 'heraklion'],
+	['serres', 'serres'],
+	['evia', 'evia'],
+	['corfu', 'corfu'],
+	['chios', 'chios'],
+	['attica', 'attica'],
+	['folegandros', 'folegandros'],
+	['patras', 'patras'],
+	['rethymno', 'rethymno'],
+	['samothraki', 'samothraki'],
+	['chalkidiki', 'chalkidiki']
 ];
+
+function citySlug(city: string | null): string | undefined {
+	if (!city) return undefined;
+	const s = city.toLowerCase();
+	for (const [needle, id] of CITY_MATCHERS) {
+		if (s.includes(needle)) return id;
+	}
+	return s.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+// Derive the questionnaire type from style + flavour + dietary flags (priority order).
+function deriveType(raw: RawBeer): TypeId {
+	if (raw.gluten_free) return 'gluten-free';
+	const s = (raw.style + ' ' + raw.flavor.join(' ')).toLowerCase();
+	if (/weiss|weizen|hefe|\bwit\b|witte|wheat|weiz/.test(s)) return 'wheat';
+	if (/sour|gose|lambic|kriek|framboise|cassis|cider|radler|fruit|cherry|berry|mango|peach|passion|raspberry|strawberry|apple|blueberry/.test(s))
+		return 'fruity';
+	if (/stout|porter|imperial|barley\s?wine|barleywine|west coast|wcipa|\bdipa\b|\btipa\b|double ipa|triple ipa|quadruple|bitter|resinous/.test(s))
+		return 'bitter';
+	if (/pilsner|pilsener|\bpils\b|lager|helles|\bcrisp\b|clean/.test(s)) return 'crispy';
+	return 'aromatic';
+}
+
+export const beers: Beer[] = (rawCatalog as RawBeer[]).map((raw) => ({
+	id: raw.id,
+	name: raw.name,
+	brewery: raw.brewery ?? 'Unknown',
+	style: raw.style,
+	abv: raw.abv ?? 0,
+	ibu: raw.ibu,
+	color: raw.color ?? 'blonde-ale',
+	country: countrySlug(raw.country),
+	city: citySlug(raw.city),
+	type: deriveType(raw),
+	flavor: raw.flavor,
+	notes: raw.notes || undefined
+}));
 
 function abvInRange(abv: number, range: AbvId): boolean {
 	switch (range) {

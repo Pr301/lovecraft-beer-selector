@@ -3,7 +3,8 @@
 	import { colorMeta, countryMeta } from '$lib/data/beers'
 	import type { Locale } from '$lib/i18n'
 
-	let { beer, locale }: { beer: Beer; locale: Locale } = $props()
+	// `locale` is accepted for API compatibility; card content is language-neutral.
+	let { beer }: { beer: Beer; locale?: Locale } = $props()
 
 	let color = $derived(colorMeta[beer.color])
 	let country = $derived(countryMeta[beer.country])
@@ -29,9 +30,11 @@
 		<div class="flex-1 text-center py-3">
 			<span class="font-black text-sm">{beer.abv}% ABV</span>
 		</div>
-		<div class="flex-1 text-center py-3">
-			<span class="font-black text-sm">{beer.ibu} IBU</span>
-		</div>
+		{#if beer.ibu != null}
+			<div class="flex-1 text-center py-3">
+				<span class="font-black text-sm">{beer.ibu} IBU</span>
+			</div>
+		{/if}
 	</div>
 
 	<!-- Color + Country -->
@@ -47,8 +50,12 @@
 		<span class="text-3xl leading-none">{country.flag}</span>
 	</div>
 
-	<!-- Description -->
-	<p class="mt-3 px-1 text-sm leading-relaxed text-black line-clamp-4">
-		{beer.description[locale]}
-	</p>
+	<!-- Flavour profile -->
+	<div class="mt-3 px-1 flex flex-wrap gap-1.5">
+		{#each beer.flavor as note (note)}
+			<span class="bg-white/80 text-black text-xs font-bold rounded-full px-2.5 py-1 capitalize">
+				{note.replace(/-/g, ' ')}
+			</span>
+		{/each}
+	</div>
 </div>

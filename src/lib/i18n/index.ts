@@ -49,16 +49,36 @@ export const translations = {
 				greece: 'Greece',
 				germany: 'Germany',
 				belgium: 'Belgium',
+				netherlands: 'Netherlands',
+				czech: 'Czech Republic',
+				poland: 'Poland',
+				bulgaria: 'Bulgaria',
+				hungary: 'Hungary',
+				latvia: 'Latvia',
+				sweden: 'Sweden',
+				austria: 'Austria',
+				italy: 'Italy',
 				uk: 'UK',
+				ireland: 'Ireland',
 				usa: 'USA',
-				japan: 'Japan',
 				mexico: 'Mexico',
-				australia: 'Australia'
+				cyprus: 'Cyprus',
+				other: 'Other'
 			},
 			cities: {
 				athens: 'Athens',
 				thessaloniki: 'Thessaloniki',
-				heraklion: 'Heraklion'
+				heraklion: 'Heraklion',
+				serres: 'Serres',
+				evia: 'Evia',
+				corfu: 'Corfu',
+				chios: 'Chios',
+				attica: 'Attica',
+				folegandros: 'Folegandros',
+				patras: 'Patras',
+				rethymno: 'Rethymno',
+				samothraki: 'Samothraki',
+				chalkidiki: 'Chalkidiki'
 			}
 		},
 		random: {
@@ -128,16 +148,36 @@ export const translations = {
 				greece: 'Ελλάδα',
 				germany: 'Γερμανία',
 				belgium: 'Βέλγιο',
+				netherlands: 'Ολλανδία',
+				czech: 'Τσεχία',
+				poland: 'Πολωνία',
+				bulgaria: 'Βουλγαρία',
+				hungary: 'Ουγγαρία',
+				latvia: 'Λετονία',
+				sweden: 'Σουηδία',
+				austria: 'Αυστρία',
+				italy: 'Ιταλία',
 				uk: 'Ηνωμένο Βασίλειο',
+				ireland: 'Ιρλανδία',
 				usa: 'ΗΠΑ',
-				japan: 'Ιαπωνία',
 				mexico: 'Μεξικό',
-				australia: 'Αυστραλία'
+				cyprus: 'Κύπρος',
+				other: 'Άλλη'
 			},
 			cities: {
 				athens: 'Αθήνα',
 				thessaloniki: 'Θεσσαλονίκη',
-				heraklion: 'Ηράκλειο'
+				heraklion: 'Ηράκλειο',
+				serres: 'Σέρρες',
+				evia: 'Εύβοια',
+				corfu: 'Κέρκυρα',
+				chios: 'Χίος',
+				attica: 'Αττική',
+				folegandros: 'Φολέγανδρος',
+				patras: 'Πάτρα',
+				rethymno: 'Ρέθυμνο',
+				samothraki: 'Σαμοθράκη',
+				chalkidiki: 'Χαλκιδική'
 			}
 		},
 		random: {

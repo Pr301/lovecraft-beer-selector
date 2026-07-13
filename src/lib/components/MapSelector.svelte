@@ -3,7 +3,7 @@
 	import type { CountryId, CityId } from '$lib/data/beers';
 	import type { Translations } from '$lib/i18n';
 	import { maps } from '$lib/data/maps.generated';
-	import type { MapView } from '$lib/data/maps.generated';
+	import type { MapView, LabelPos } from '$lib/data/maps.generated';
 
 	let {
 		country = '',
@@ -17,7 +17,7 @@
 		onselect: (sel: { country: CountryId | ''; city: CityId | '' }) => void;
 	} = $props();
 
-	const WORLD_COUNTRIES: CountryId[] = ['usa', 'japan', 'mexico', 'australia'];
+	const WORLD_COUNTRIES: CountryId[] = ['usa', 'mexico', 'cyprus'];
 	const DEPTH: Record<MapView, number> = { world: 0, europe: 1, greece: 2 };
 
 	function initialView(): MapView {
@@ -35,12 +35,30 @@
 	function zoomTo(v: MapView) {
 		zoomingIn = DEPTH[v] > DEPTH[view];
 		view = v;
+		if (country || city) onselect({ country: '', city: '' });
 	}
 
 	function markerLabel(id: string): string {
 		if (view === 'greece') return labels.cities[id as CityId];
 		if (id === 'europe') return labels.europe;
 		return labels.countries[id as CountryId];
+	}
+
+	// Label sits outside the (zero-size) marker anchor on the given side, so the
+	// dot itself stays pinned exactly at the marker's true xPct/yPct regardless
+	// of which way its label is pushed to avoid a neighbor's label.
+	function labelPosClasses(pos: LabelPos): string {
+		switch (pos) {
+			case 'top':
+				return 'left-1/2 bottom-1.5 -translate-x-1/2';
+			case 'left':
+				return 'right-1.5 top-1/2 -translate-y-1/2';
+			case 'right':
+				return 'left-1.5 top-1/2 -translate-y-1/2';
+			case 'bottom':
+			default:
+				return 'left-1/2 top-1.5 -translate-x-1/2';
+		}
 	}
 
 	function isSelected(id: string): boolean {
@@ -54,9 +72,10 @@
 			onselect({ country: 'greece', city: id as CityId });
 		} else if (id === 'europe') {
 			zoomTo('europe');
-		} else if (view === 'europe' && id === 'greece') {
-			zoomTo('greece');
 		} else {
+			// Selects the country outright — Greece included, same as any other
+			// marker on this view. Drilling into its cities is a separate,
+			// explicit action via the "Greece" zoom button below the map.
 			onselect({ country: id as CountryId, city: '' });
 		}
 	}
@@ -85,20 +104,21 @@
 					{#each map.markers as marker (marker.id)}
 						<button
 							onclick={() => clickMarker(marker.id)}
-							class="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center p-2"
-							style="left: {marker.xPct}%; top: {marker.yPct}%"
+							class="group absolute"
+							style="left: {marker.xPct}%; top: {marker.yPct}%; width: 0; height: 0; overflow: visible"
 							aria-label={markerLabel(marker.id)}
 							aria-pressed={isSelected(marker.id)}
 						>
 							<span
-								class="w-3.5 h-3.5 rounded-full shrink-0 transition-all duration-150
+								class="absolute z-10 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full shrink-0 transition-all duration-150 group-focus-visible:ring-2 group-focus-visible:ring-offset-2 group-focus-visible:ring-brand-green
 									{isSelected(marker.id)
 									? 'bg-brand-green ring-4 ring-brand-green/40 scale-125'
 									: 'bg-brand-pink animate-pulse'}"
 							></span>
 							<span
-								class="font-fredoka font-black text-xs leading-tight mt-0.5 px-1.5 py-0.5 rounded-full bg-white/85
-									{isSelected(marker.id) ? 'text-brand-green' : 'text-brand-pink'}"
+								class="absolute z-0 whitespace-nowrap font-fredoka font-black text-xs leading-tight px-1.5 py-0.5 rounded-full bg-white/85
+									{isSelected(marker.id) ? 'text-brand-green' : 'text-brand-pink'}
+									{labelPosClasses(marker.labelPos)}"
 							>
 								{markerLabel(marker.id)}
 							</span>
@@ -109,12 +129,20 @@
 		{/key}
 
 		{#if view === 'europe'}
-			<button
-				onclick={() => zoomTo('world')}
-				class="absolute bottom-2 right-2 bg-brand-pink font-fredoka font-black text-sm text-white px-4 py-1.5 rounded-full"
-			>
-				🌐 {labels.worldwide}
-			</button>
+			<div class="absolute bottom-2 right-2 flex flex-col items-end gap-2">
+				<button
+					onclick={() => zoomTo('greece')}
+					class="bg-brand-pink font-fredoka font-black text-sm text-white px-4 py-1.5 rounded-full"
+				>
+					🇬🇷 {labels.countries.greece}
+				</button>
+				<button
+					onclick={() => zoomTo('world')}
+					class="bg-brand-pink font-fredoka font-black text-sm text-white px-4 py-1.5 rounded-full"
+				>
+					🌐 {labels.worldwide}
+				</button>
+			</div>
 		{:else if view === 'greece'}
 			<button
 				onclick={() => zoomTo('europe')}
