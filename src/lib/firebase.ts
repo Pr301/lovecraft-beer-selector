@@ -3,13 +3,14 @@ import { getFirestore } from 'firebase/firestore';
 
 // Public client identifiers — safe to ship in the bundle. Access is enforced
 // by Firestore security rules (firestore.rules), not by hiding these values.
+// Pulled from env vars so raw values don't sit in source/git history.
 const firebaseConfig = {
-	apiKey: 'AIzaSyCtXRO0-yUzuZe0luVge2LxvbkywuyFAyc',
-	authDomain: 'lovecraft-beer-selector.firebaseapp.com',
-	projectId: 'lovecraft-beer-selector',
-	storageBucket: 'lovecraft-beer-selector.firebasestorage.app',
-	messagingSenderId: '705190059870',
-	appId: '1:705190059870:web:7af30d05742f53f469b9cf'
+	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+	authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+	projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+	storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+	messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+	appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 export const app = initializeApp(firebaseConfig);
