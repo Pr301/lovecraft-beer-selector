@@ -81,7 +81,7 @@
 		{/if}
 	</div>
 
-	<div class="flex-1 flex flex-col items-center justify-center px-4 py-2">
+	<div class="relative flex-1 flex flex-col items-center justify-center px-4 py-2 overflow-hidden">
 		{@render children()}
 	</div>
 
