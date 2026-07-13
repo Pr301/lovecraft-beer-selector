@@ -166,6 +166,27 @@
 </script>
 
 <div class="relative overflow-hidden bg-white" style="height: 100dvh">
+	<div class="fixed bottom-4 right-4 z-50 flex gap-3">
+		<button
+			onclick={() => (locale = 'gr')}
+			aria-label="Ελληνικά"
+			class="text-5xl leading-none p-2 rounded-full transition-opacity"
+			class:opacity-100={locale === 'gr'}
+			class:opacity-40={locale !== 'gr'}
+		>
+			🇬🇷
+		</button>
+		<button
+			onclick={() => (locale = 'en')}
+			aria-label="English"
+			class="text-5xl leading-none p-2 rounded-full transition-opacity"
+			class:opacity-100={locale === 'en'}
+			class:opacity-40={locale !== 'en'}
+		>
+			🇺🇸
+		</button>
+	</div>
+
 	{#if loadError}
 		<div class="h-full flex items-center justify-center px-6 text-center">
 			<p class="font-fredoka font-black text-brand-pink">Failed to load beers: {loadError}</p>
@@ -206,29 +227,6 @@
 						>
 							{t.landing.cta}
 						</button>
-
-						<div class="flex gap-10 shrink-0">
-							<button
-								onclick={() => (locale = 'gr')}
-								class="flex flex-col items-center gap-1 transition-opacity"
-								class:opacity-100={locale === 'gr'}
-								class:opacity-40={locale !== 'gr'}
-							>
-								<span class="text-4xl">🇬🇷</span>
-								<span class="font-fredoka font-black text-sm text-gray-600">{t.landing.langGr}</span
-								>
-							</button>
-							<button
-								onclick={() => (locale = 'en')}
-								class="flex flex-col items-center gap-1 transition-opacity"
-								class:opacity-100={locale === 'en'}
-								class:opacity-40={locale !== 'en'}
-							>
-								<span class="text-4xl">🇺🇸</span>
-								<span class="font-fredoka font-black text-sm text-gray-600">{t.landing.langEn}</span
-								>
-							</button>
-						</div>
 					</div>
 
 					<div class="shrink-0 py-3 text-center">
@@ -246,8 +244,6 @@
 			backLabel={t.back}
 			onhome={reset}
 			homeLabel={t.home}
-			{locale}
-			onlocale={(l) => (locale = l)}
 		>
 			{#key step}
 				<div
