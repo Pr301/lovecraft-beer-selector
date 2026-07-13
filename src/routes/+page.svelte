@@ -8,7 +8,7 @@
 	import BeerCard from '$lib/components/BeerCard.svelte';
 	import { translations } from '$lib/i18n';
 	import type { Locale } from '$lib/i18n';
-	import { beers, filterBeer, loadBeers, countByType } from '$lib/data/beers';
+	import { beers, filterBeer, loadBeers, countByType, countByColor } from '$lib/data/beers';
 	import type { Beer, TypeId, ColorId, AbvId, CountryId, CityId } from '$lib/data/beers';
 
 	type Mode = 'quiz' | 'country' | 'style' | 'random';
@@ -45,6 +45,7 @@
 	let result = $derived(mode === 'random' && randomBeer ? randomBeer : filterBeer(answers));
 	// Recomputes once beersReady flips true (beers[] is populated by then).
 	let typeCounts = $derived(beersReady ? countByType() : null);
+	let colorCounts = $derived(beersReady ? countByColor(answers.type) : null);
 
 	const TYPE_OPTIONS: TypeId[] = ['aromatic', 'bitter', 'fruity', 'gluten-free', 'crispy', 'wheat'];
 	const MODE_OPTIONS: { id: Mode; emoji: string }[] = [
@@ -236,7 +237,14 @@
 			</div>
 		{/key}
 	{:else}
-		<QuestionLayout onback={handleBack} backLabel={t.back} onhome={reset} homeLabel={t.home} {locale} onlocale={(l) => (locale = l)}>
+		<QuestionLayout
+			onback={handleBack}
+			backLabel={t.back}
+			onhome={reset}
+			homeLabel={t.home}
+			{locale}
+			onlocale={(l) => (locale = l)}
+		>
 			{#key step}
 				<div
 					class="absolute inset-0 overflow-hidden"
@@ -310,7 +318,11 @@
 							>
 								{t.q2.question}
 							</h2>
-							<BeerGlass selected={answers.color} onselect={(c) => (answers.color = c)} />
+							<BeerGlass
+								selected={answers.color}
+								counts={colorCounts}
+								onselect={(c) => (answers.color = c)}
+							/>
 							<button
 								onclick={() => goTo(4)}
 								disabled={!answers.color}

@@ -283,17 +283,153 @@ const STYLE_KEY_TYPES: Record<string, TypeId[]> = {
 	'gluten-free-beer': ['gluten-free']
 };
 
+// Curated map from BA style-guideline key -> the questionnaire color (the swatch the
+// user taps on the BeerGlass). Single-valued (a beer has one color), keyed on the same
+// style keys as STYLE_KEY_TYPES so color is derived from the BA taxonomy at load time
+// rather than trusting the ad-hoc seed value. Assignments follow each style's SRM/appearance.
+const STYLE_KEY_COLOR: Record<string, ColorId> = {
+	// pale-lager — clean light lagers
+	'contemporary-american-lager': 'pale-lager',
+	'international-pilsener': 'pale-lager',
+	'german-pilsener': 'pale-lager',
+	'munich-helles': 'pale-lager',
+	'czech-pale-lager': 'pale-lager',
+	'india-pale-lager': 'pale-lager',
+	'west-coast-pilsener': 'pale-lager',
+	'non-alcohol-malt-beverage': 'pale-lager',
+	// pale-ale-ipa — pale/hazy hop-forward ales
+	'west-coast-ipa': 'pale-ale-ipa',
+	'american-ipa': 'pale-ale-ipa',
+	'imperial-double-ipa': 'pale-ale-ipa',
+	'session-ipa': 'pale-ale-ipa',
+	'american-strong-pale-ale': 'pale-ale-ipa',
+	'american-belgo-ale': 'pale-ale-ipa',
+	'british-ipa': 'pale-ale-ipa',
+	'juicy-hazy-ipa': 'pale-ale-ipa',
+	'juicy-hazy-pale-ale': 'pale-ale-ipa',
+	'hazy-imperial-double-ipa': 'pale-ale-ipa',
+	'american-pale-ale': 'pale-ale-ipa',
+	// blonde-ale — golden/pale ales, wheats, pale sours
+	'belgian-tripel': 'blonde-ale',
+	'belgian-strong-blonde': 'blonde-ale',
+	'belgian-blonde': 'blonde-ale',
+	'golden-blonde-ale': 'blonde-ale',
+	'specialty-saison': 'blonde-ale',
+	'herb-spice-beer': 'blonde-ale',
+	'specialty-honey-beer': 'blonde-ale',
+	'other-strong-ale-or-lager': 'blonde-ale',
+	'gluten-free-beer': 'blonde-ale',
+	'mixed-culture-brett-beer': 'blonde-ale',
+	'wild-beer': 'blonde-ale',
+	'contemporary-gose': 'blonde-ale',
+	'berliner-weisse': 'blonde-ale',
+	'south-german-hefeweizen': 'blonde-ale',
+	'belgian-witbier': 'blonde-ale',
+	'american-fruit-beer': 'blonde-ale',
+	'american-fruited-sour-ale': 'blonde-ale',
+	// amber-ale — amber/copper
+	'german-marzen': 'amber-ale',
+	'classic-english-pale-ale': 'amber-ale',
+	'special-bitter-best-bitter': 'amber-ale',
+	'amber-red-ale': 'amber-ale',
+	'belgian-speciale-belge': 'amber-ale',
+	'smoke-beer': 'amber-ale',
+	// red-ale
+	'imperial-red-ale': 'red-ale',
+	'irish-red-ale': 'red-ale',
+	'belgian-fruit-lambic': 'red-ale',
+	'belgian-fruit-beer': 'red-ale',
+	// brown-ale — dark lagers, dubbels, bocks, dark strong ales
+	'czech-dark-lager': 'brown-ale',
+	'european-dark-lager': 'brown-ale',
+	'american-barleywine': 'brown-ale',
+	'english-brown-ale': 'brown-ale',
+	'belgian-dubbel': 'brown-ale',
+	'belgian-quadrupel': 'brown-ale',
+	'belgian-strong-dark-ale': 'brown-ale',
+	'bamberg-bock-rauchbier': 'brown-ale',
+	'german-doppelbock': 'brown-ale',
+	'british-strong-ale': 'brown-ale',
+	'aged-beer': 'brown-ale',
+	'south-german-weizenbock': 'brown-ale',
+	'south-german-dunkel-weizen': 'brown-ale',
+	'dessert-pastry-beer': 'brown-ale',
+	// porter
+	'baltic-porter': 'porter',
+	'brown-porter': 'porter',
+	'american-imperial-porter': 'porter',
+	// stout
+	'american-imperial-stout': 'stout',
+	'american-stout': 'stout',
+	'export-stout': 'stout',
+	'classic-irish-dry-stout': 'stout',
+	'oatmeal-stout': 'stout',
+	'sweet-cream-stout': 'stout'
+};
+
 // Fallback for the handful of beers with no BA style key (ciders/radlers): a trimmed
 // version of the old style+flavour regex, returning a single best-guess type.
 function fallbackTypes(raw: RawBeer): TypeId[] {
 	const s = (raw.style + ' ' + raw.flavor.join(' ')).toLowerCase();
 	if (/weiss|weizen|hefe|\bwit\b|witte|wheat|weiz/.test(s)) return ['wheat'];
-	if (/sour|gose|lambic|kriek|framboise|cassis|cider|radler|fruit|cherry|berry|mango|peach|passion|raspberry|strawberry|apple|blueberry/.test(s))
+	if (
+		/sour|gose|lambic|kriek|framboise|cassis|cider|radler|fruit|cherry|berry|mango|peach|passion|raspberry|strawberry|apple|blueberry/.test(
+			s
+		)
+	)
 		return ['fruity'];
-	if (/stout|porter|imperial|barley\s?wine|barleywine|west coast|wcipa|\bdipa\b|\btipa\b|double ipa|triple ipa|quadruple|bitter|resinous/.test(s))
+	if (
+		/stout|porter|imperial|barley\s?wine|barleywine|west coast|wcipa|\bdipa\b|\btipa\b|double ipa|triple ipa|quadruple|bitter|resinous/.test(
+			s
+		)
+	)
 		return ['bitter'];
 	if (/pilsner|pilsener|\bpils\b|lager|helles|\bcrisp\b|clean/.test(s)) return ['crispy'];
 	return ['aromatic'];
+}
+
+// Fallback color for beers with no BA style key (ciders/radlers/hop-waters): a trimmed
+// port of colorFor() from scripts/build-beers-enriched.mjs. Always returns a ColorId
+// (never null) so Beer.color stays non-null; the truly colorless ones land on blonde-ale.
+function fallbackColor(raw: RawBeer): ColorId {
+	const s = raw.style.toLowerCase();
+	if (
+		/kriek|cherry|framboise|raspberry|cassis|strawberry|fruit lambic|rouge|red ale|red ipa|red beer|ruby/.test(
+			s
+		)
+	)
+		return 'red-ale';
+	if (
+		/imperial stout|oatmeal stout|tropical stout|cream stout|nitro stout|espresso stout|\bstout\b/.test(
+			s
+		)
+	)
+		return 'stout';
+	if (/baltic porter/.test(s)) return 'brown-ale';
+	if (/porter/.test(s)) return 'porter';
+	if (
+		/quad|doppelbock|rauchbock|dark lager|dunkel|dark ale|bruin|eisbock|barley\s?wine|barleywine|imperial(?!\s*red)/.test(
+			s
+		)
+	)
+		return 'brown-ale';
+	if (/amber|marzen|märzen|vienna|dubbel|rauch|chestnut|honey ale/.test(s)) return 'amber-ale';
+	if (/imperial red|red ipa/.test(s)) return 'red-ale';
+	if (
+		/neipa|hazy|new england|ipa|pale ale|\bapa\b|xpa|dipa|tipa|india pale|smash|cold ipa|hipa/.test(
+			s
+		)
+	)
+		return 'pale-ale-ipa';
+	if (/pilsner|pilsener|\bpils\b|helles|radler|pale lager|hoppy lager|\blager\b/.test(s))
+		return 'pale-lager';
+	return 'blonde-ale';
+}
+
+// Derive the questionnaire color from the BA style key, falling back to the style regex.
+function deriveColor(raw: RawBeer): ColorId {
+	const key = raw.style_guideline?.key;
+	return (key && STYLE_KEY_COLOR[key]) || fallbackColor(raw);
 }
 
 // Derive the questionnaire types from the BA style key + dietary flag (multi-tag).
@@ -317,7 +453,7 @@ function mapRawBeer(raw: RawBeer): Beer {
 		style: raw.style,
 		abv: raw.abv ?? 0,
 		ibu: raw.ibu,
-		color: raw.color ?? 'blonde-ale',
+		color: deriveColor(raw),
 		country: countrySlug(raw.country),
 		city: citySlug(raw.city),
 		types: deriveTypes(raw),
@@ -350,6 +486,28 @@ export function countByType(): Record<TypeId, number> {
 	};
 	for (const b of beers) {
 		for (const t of b.types) counts[t]++;
+	}
+	return counts;
+}
+
+// How many loaded beers carry each color, optionally pre-filtered to a questionnaire
+// type (the q1 answer) so q2 only offers colors that exist for that type. With no type
+// the totals sum to beers.length. Used to badge the q2 color bands and disable (X out)
+// colors with no matching beers.
+export function countByColor(type: TypeId | '' = ''): Record<ColorId, number> {
+	const counts: Record<ColorId, number> = {
+		'pale-lager': 0,
+		'blonde-ale': 0,
+		'pale-ale-ipa': 0,
+		'amber-ale': 0,
+		'red-ale': 0,
+		'brown-ale': 0,
+		porter: 0,
+		stout: 0
+	};
+	for (const b of beers) {
+		if (type && !b.types.includes(type)) continue;
+		counts[b.color]++;
 	}
 	return counts;
 }
