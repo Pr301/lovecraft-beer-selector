@@ -55,6 +55,18 @@ export interface StyleGuideline {
 	ibu: string;
 	abv: string;
 	description: string;
+	color?: string;
+	clarity?: string;
+	maltAroma?: string;
+	hopAroma?: string;
+	bitterness?: string;
+	fermentation?: string;
+	body?: string;
+	additionalNotes?: string;
+	originalGravity?: string;
+	finalGravity?: string;
+	abw?: string;
+	ebc?: string;
 }
 
 export interface Beer {
