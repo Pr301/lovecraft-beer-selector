@@ -4,6 +4,10 @@
 - **Package Manager**: npm
 - **Add-ons**: prettier, eslint, tailwindcss, mcp
 
+## Workflow preferences
+
+- Never test changes in a browser (Browser pane / preview tools) unless the user explicitly asks for it. Do not start dev servers or navigate preview tabs on your own initiative.
+
 ---
 
 You are able to use the Svelte MCP server, where you have access to comprehensive Svelte 5 and SvelteKit documentation. Here's how to use the available tools effectively:
