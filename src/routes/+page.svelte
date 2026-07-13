@@ -27,7 +27,7 @@
 	});
 
 	let step = $state(0);
-	let direction = $state(1);
+	let direction: 1 | -1 = $state(1);
 	let locale = $state<Locale>('en');
 	let mode = $state<Mode>('quiz');
 	let randomBeer = $state<Beer | null>(null);
@@ -173,7 +173,7 @@
 			<div
 				class="absolute inset-0 overflow-hidden"
 				in:slide={{ dir: direction }}
-				out:slide={{ dir: -direction }}
+				out:slide={{ dir: direction === 1 ? -1 : 1 }}
 			>
 				<div class="h-full flex flex-col bg-white">
 					<div
@@ -239,7 +239,7 @@
 				<div
 					class="absolute inset-0 overflow-hidden"
 					in:slide={{ dir: direction }}
-					out:slide={{ dir: -direction }}
+					out:slide={{ dir: direction === 1 ? -1 : 1 }}
 				>
 					{#if step === 1}
 						<!-- Mode selection: how do you want to find your beer? -->
