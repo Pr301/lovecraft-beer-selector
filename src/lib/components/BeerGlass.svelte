@@ -70,6 +70,11 @@
 	function isDisabled(id: ColorId): boolean {
 		return counts != null && counts[id] === 0;
 	}
+	// Rough width estimate for bold 13px sans-serif, used to size the label's
+	// background patch since SVG text can't be measured without a live DOM.
+	function labelHalfWidth(label: string) {
+		return (label.length * 7.5) / 2;
+	}
 
 	// Center the viewBox on the glass itself (W / 2), not on the glass-plus-badges
 	// bounding box, so the badge column (widest at the top band) doesn't pull the
@@ -85,6 +90,27 @@
 	class="w-full max-w-sm max-h-[45vh] mx-auto cursor-pointer select-none"
 	aria-label="Beer color selector"
 >
+	<defs>
+		{#each BANDS as band (band.id)}
+			<pattern
+				id="disabled-hatch-{band.id}"
+				width="10"
+				height="10"
+				patternTransform="rotate(45)"
+				patternUnits="userSpaceOnUse"
+			>
+				<line
+					x1="0"
+					y1="0"
+					x2="0"
+					y2="10"
+					stroke={band.textColor}
+					stroke-opacity="0.45"
+					stroke-width="4"
+				/>
+			</pattern>
+		{/each}
+	</defs>
 	<!-- Color bands as trapezoid polygons -->
 	{#each BANDS as band, i (band.id)}
 		{@const disabled = isDisabled(band.id)}
@@ -101,7 +127,18 @@
 			onkeydown={disabled ? undefined : (e) => e.key === 'Enter' && onselect(band.id)}
 			class={disabled ? 'cursor-not-allowed' : ''}
 		/>
-		<!-- Disabled: struck-through label instead of a line overlay -->
+		{#if disabled}
+			<polygon points={bandPoints(i)} fill="url(#disabled-hatch-{band.id})" pointer-events="none" />
+		{/if}
+		<rect
+			x={W / 2 - labelHalfWidth(band.label) - 9}
+			y={bandMidY(i) - 14}
+			width={labelHalfWidth(band.label) * 2 + 18}
+			height="19"
+			rx="4"
+			fill={band.fill}
+			pointer-events="none"
+		/>
 		<text
 			x={W / 2}
 			y={bandMidY(i)}
@@ -110,7 +147,6 @@
 			font-size="13"
 			font-weight="bold"
 			font-family="sans-serif"
-			text-decoration={disabled ? 'line-through' : 'none'}
 			pointer-events="none"
 		>
 			{band.label}
@@ -128,21 +164,44 @@
 		{/if}
 
 		<!-- Count badge, parallel to the glass's tapered right edge -->
-		{#if count}
-			<circle cx={badgeX(i)} cy={bandCenterY(i)} r={BADGE_R} fill="#ff1f9c" pointer-events="none" />
-			<text
-				x={badgeX(i)}
-				y={bandCenterY(i)}
-				text-anchor="middle"
-				dominant-baseline="central"
-				fill="#fff"
-				font-size="13"
-				font-weight="bold"
-				font-family="sans-serif"
+		{#if count != null}
+			<circle
+				cx={badgeX(i)}
+				cy={bandCenterY(i)}
+				r={BADGE_R}
+				fill="#ff1f9c"
+				opacity={count === 0 ? 0.35 : 1}
 				pointer-events="none"
-			>
-				{count}
-			</text>
+			/>
+			{#if count === 0}
+				<text
+					x={badgeX(i)}
+					y={bandCenterY(i)}
+					text-anchor="middle"
+					dominant-baseline="central"
+					fill="#fff"
+					font-size="13"
+					font-weight="bold"
+					font-family="sans-serif"
+					pointer-events="none"
+				>
+					✕
+				</text>
+			{:else}
+				<text
+					x={badgeX(i)}
+					y={bandCenterY(i)}
+					text-anchor="middle"
+					dominant-baseline="central"
+					fill="#fff"
+					font-size="13"
+					font-weight="bold"
+					font-family="sans-serif"
+					pointer-events="none"
+				>
+					{count}
+				</text>
+			{/if}
 		{/if}
 	{/each}
 

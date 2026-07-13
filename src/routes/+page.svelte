@@ -89,9 +89,13 @@
 			case 3:
 				goTo(2, -1);
 				break;
-			case 4:
-				goTo(3, -1);
+			case 4: {
+				const available = (
+					Object.entries(countByColor(answers.type)) as [ColorId, number][]
+				).filter(([, n]) => n > 0);
+				goTo(available.length === 1 ? 2 : 3, -1);
 				break;
+			}
 			case 5:
 				goTo(mode === 'country' ? 1 : 4, -1);
 				break;
@@ -293,7 +297,19 @@
 									<button
 										onclick={() => {
 											answers.type = typeId;
-											goTo(mode === 'style' ? 6 : 3);
+											if (mode === 'style') {
+												goTo(6);
+												return;
+											}
+											const available = (
+												Object.entries(countByColor(typeId)) as [ColorId, number][]
+											).filter(([, n]) => n > 0);
+											if (available.length === 1) {
+												answers.color = available[0][0];
+												goTo(4);
+											} else {
+												goTo(3);
+											}
 										}}
 										class="relative bg-brand-green font-fredoka font-black text-2xl text-black py-4 rounded-2xl leading-tight flex items-center justify-center"
 									>
