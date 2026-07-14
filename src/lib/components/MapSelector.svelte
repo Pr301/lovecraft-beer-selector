@@ -228,12 +228,6 @@
 	<p class="h-6 text-center font-fredoka font-black text-sm shrink-0">
 		{#if view === 'greece' && !city}
 			<span class="text-brand-pink">{labels.pickCity}</span>
-		{:else if city}
-			<span class="text-brand-green">
-				✓ {labels.cities[city]}, {labels.countries.greece}
-			</span>
-		{:else if country}
-			<span class="text-brand-green">✓ {labels.countries[country]}</span>
 		{/if}
 	</p>
 </div>
