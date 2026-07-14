@@ -97,9 +97,8 @@
 		return country === id;
 	}
 
-	// Count badge appended after the name, inside the same label pill, so it only
-	// grows the pill in the direction labelPos already reserves as open space.
-	// The synthetic "europe" marker has no single count of its own.
+	// Rendered inside the dot itself. The synthetic "europe" marker has no
+	// single count of its own.
 	function markerCount(id: string): number | undefined {
 		if (id === 'europe') return undefined;
 		if (view === 'greece') return cityCounts?.[id as CityId];
@@ -108,15 +107,22 @@
 
 	function clickMarker(id: string) {
 		if (view === 'greece') {
-			onselect({ country: 'greece', city: id as CityId });
+			// Clicking the already-selected city unselects it, same toggle as
+			// clicking blank map space.
+			onselect(city === id ? { country: '', city: '' } : { country: 'greece', city: id as CityId });
 		} else if (id === 'europe') {
 			zoomTo('europe');
 		} else {
 			// Selects the country outright — Greece included, same as any other
 			// marker on this view. Drilling into its cities is a separate,
 			// explicit action via the "Greece" zoom button below the map.
-			onselect({ country: id as CountryId, city: '' });
+			// Clicking the already-selected country unselects it.
+			onselect(country === id ? { country: '', city: '' } : { country: id as CountryId, city: '' });
 		}
+	}
+
+	function clearSelection() {
+		if (country || city) onselect({ country: '', city: '' });
 	}
 </script>
 
@@ -140,6 +146,19 @@
 						class="absolute inset-0 w-full h-full select-none"
 					/>
 
+					<!-- Full-size click-to-clear plane, painted under the marker buttons
+						below so any click that doesn't land on a marker unselects. A real
+						button for native mouse/keyboard click handling, hidden from
+						assistive tech since it's a supplementary gesture (the same
+						unselect is also reachable by clicking the selected marker again). -->
+					<button
+						type="button"
+						tabindex="-1"
+						aria-hidden="true"
+						onclick={clearSelection}
+						class="absolute inset-0 w-full h-full cursor-default"
+					></button>
+
 					{#each visibleMarkers as marker (marker.id)}
 						{@const count = markerCount(marker.id)}
 						<button
@@ -152,25 +171,19 @@
 							aria-pressed={isSelected(marker.id)}
 						>
 							<span
-								class="absolute z-10 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full shrink-0 transition-all duration-150 group-focus-visible:ring-2 group-focus-visible:ring-offset-2 group-focus-visible:ring-brand-green
+								class="absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full shrink-0 flex items-center justify-center font-fredoka font-black text-white leading-none transition-all duration-150 group-focus-visible:ring-2 group-focus-visible:ring-offset-2 group-focus-visible:ring-brand-green
 									{isSelected(marker.id)
-									? 'bg-brand-green ring-4 ring-brand-green/40 scale-125'
-									: 'bg-brand-pink animate-pulse'}"
-							></span>
+									? 'bg-brand-green ring-4 ring-brand-green/40 scale-125 w-5 h-5 text-[9px]'
+									: 'bg-brand-pink animate-pulse w-4 h-4 text-[8px]'}"
+							>
+								{count ?? ''}
+							</span>
 							<span
-								class="absolute z-0 flex items-center gap-1 whitespace-nowrap font-fredoka font-black text-xs leading-tight px-1.5 py-0.5 rounded-full bg-white/85
+								class="absolute z-0 whitespace-nowrap font-fredoka font-black text-xs leading-tight px-1.5 py-0.5 rounded-full bg-white/85
 									{isSelected(marker.id) ? 'text-brand-green' : 'text-brand-pink'}
 									{labelPosClasses(marker.labelPos)}"
 							>
-								<span>{markerLabel(marker.id)}</span>
-								{#if count != null}
-									<span
-										class="grid place-items-center min-w-[1.1rem] h-[1.1rem] px-1 rounded-full text-[9px] text-white shrink-0
-											{isSelected(marker.id) ? 'bg-brand-green' : 'bg-brand-pink'}"
-									>
-										{count}
-									</span>
-								{/if}
+								{markerLabel(marker.id)}
 							</span>
 						</button>
 					{/each}
