@@ -190,8 +190,10 @@
 								{count ?? ''}
 							</span>
 							<span
-								class="absolute z-0 whitespace-nowrap font-fredoka font-black leading-tight px-1.5 py-0.5 rounded-full transition-all duration-150
-									{selected ? 'bg-brand-green text-black text-2xl' : 'bg-white/85 text-brand-pink text-xs'}
+								class="absolute z-0 whitespace-nowrap font-fredoka font-black leading-tight py-0.5 rounded-full transition-all duration-150
+									{selected
+									? 'bg-brand-green text-black text-2xl px-3'
+									: 'bg-white/85 text-brand-pink text-xs px-1.5'}
 									{labelPosClasses(marker.labelPos, selected)}"
 							>
 								{markerLabel(marker.id)}
