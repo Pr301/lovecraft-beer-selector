@@ -908,12 +908,23 @@ const DATA = {
 					image: '/beer-images/brewdog-elvis-juice.jpg'
 				}
 			],
-			['BrewDog Hazy Jane', 'IPA - New England / Hazy', 5.0, { conf: 'high' }],
+			// image src: https://images.openfoodfacts.org/images/products/505/602/543/4523/front_en.18.400.jpg
+			[
+				'BrewDog Hazy Jane',
+				'IPA - New England / Hazy',
+				5.0,
+				{ conf: 'high', image: '/beer-images/brewdog-hazy-jane.jpg' }
+			],
+			// image src: https://images.openfoodfacts.org/images/products/505/602/545/6570/front_en.3.400.jpg
 			[
 				'BrewDog Hazy Jane Guava',
 				'IPA - New England / Fruited',
 				5.0,
-				{ flavor: ['guava', 'tropical', 'juicy', 'soft'], conf: 'high' }
+				{
+					flavor: ['guava', 'tropical', 'juicy', 'soft'],
+					conf: 'high',
+					image: '/beer-images/brewdog-hazy-jane-guava.jpg'
+				}
 			],
 			['BrewDog Double Hazy Jane', 'IPA - Double / Hazy', 8.2, { conf: 'medium' }],
 			// image src: https://brewdog.com/cdn/shop/files/jack_hammer1_21d59b9a-524f-4326-966d-c887d729eec9.png
@@ -924,11 +935,17 @@ const DATA = {
 				{ conf: 'high', image: '/beer-images/brewdog-jack-hammer.jpg' }
 			],
 			['BrewDog Counter Strike', 'IPA', 6.0, { conf: 'low', notes: 'ABV estimated.' }],
+			// image src: https://images.openfoodfacts.org/images/products/505/602/547/7063/front_en.3.400.jpg
 			[
 				'BrewDog Cold Beer (Gluten Free)',
 				'Lager - Gluten Free',
 				4.5,
-				{ gf: true, color: 'pale-lager', conf: 'high' }
+				{
+					gf: true,
+					color: 'pale-lager',
+					conf: 'high',
+					image: '/beer-images/brewdog-cold-beer-gluten-free.jpg'
+				}
 			],
 			// image src: https://brewdog.com/cdn/shop/files/LostLager-PDP_82336e58-a579-49e3-82d8-10de4d876f07.jpg
 			[
@@ -937,8 +954,24 @@ const DATA = {
 				4.6,
 				{ conf: 'high', image: '/beer-images/brewdog-lost-lager.jpg' }
 			],
-			['BrewDog Black Heart', 'Stout', 4.1, { conf: 'high', notes: 'Stout brewed with cocoa.' }],
-			['BrewDog Hoppy Christmas', 'IPA - Winter', 7.2, { conf: 'medium' }],
+			// image src: https://images.openfoodfacts.org/images/products/505/602/547/1368/front_en.19.400.jpg
+			[
+				'BrewDog Black Heart',
+				'Stout',
+				4.1,
+				{
+					conf: 'high',
+					notes: 'Stout brewed with cocoa.',
+					image: '/beer-images/brewdog-black-heart.jpg'
+				}
+			],
+			// image src: https://images.openfoodfacts.org/images/products/506/015/491/2012/front_fr.6.400.jpg
+			[
+				'BrewDog Hoppy Christmas',
+				'IPA - Winter',
+				7.2,
+				{ conf: 'medium', image: '/beer-images/brewdog-hoppy-christmas.jpg' }
+			],
 			[
 				'BrewDog Two Scoops (Mackies collab)',
 				'IPA - Fruited',
@@ -962,7 +995,13 @@ const DATA = {
 		beers: [
 			["O'Hara's Nitro Irish Stout", 'Stout - Irish (Nitro)', 4.3, { conf: 'high' }],
 			["O'Hara's Irish Red Nitro", 'Red Ale - Irish (Nitro)', 4.3, { conf: 'high' }],
-			["O'Hara's Pale Ale", 'Pale Ale', 5.2, { conf: 'medium' }]
+			// image src: https://carlowbrewing.com/wp-content/uploads/2013/10/IPA-glsss-bottle-for-IPA-Page.png
+			[
+				"O'Hara's Pale Ale",
+				'Pale Ale',
+				5.2,
+				{ conf: 'medium', image: '/beer-images/o-hara-s-pale-ale.jpg' }
+			]
 		]
 	},
 	fullers: {
@@ -974,6 +1013,7 @@ const DATA = {
 			src: 'https://www.fullers.co.uk/'
 		},
 		beers: [
+			// image src: https://images.openfoodfacts.org/images/products/000/078/500/3647/front_en.3.400.jpg
 			[
 				"Fuller's London Pride",
 				'Bitter / Pale Ale',
@@ -981,15 +1021,28 @@ const DATA = {
 				{
 					color: 'amber-ale',
 					flavor: ['caramel', 'marmalade', 'toasted-malt', 'balanced'],
-					conf: 'high'
+					conf: 'high',
+					image: '/beer-images/fuller-s-london-pride.jpg'
 				}
 			],
-			["Fuller's Black Cab Stout", 'Stout', 4.5, { conf: 'high' }],
+			// image src: https://images.openfoodfacts.org/images/products/004/000/201/1154/front_ru.3.400.jpg
+			[
+				"Fuller's Black Cab Stout",
+				'Stout',
+				4.5,
+				{ conf: 'high', image: '/beer-images/fuller-s-black-cab-stout.jpg' }
+			],
+			// image src: https://www.fullersbrewery.co.uk/cdn/shop/files/Untitled_design_11_1d18a08e-1b30-4dbd-b115-5906e4ae75b3.png
 			[
 				"Fuller's Organic Honey Dew",
 				'Golden Ale - Organic Honey',
 				5.0,
-				{ color: 'blonde-ale', flavor: ['honey', 'floral', 'crisp', 'light'], conf: 'high' }
+				{
+					color: 'blonde-ale',
+					flavor: ['honey', 'floral', 'crisp', 'light'],
+					conf: 'high',
+					image: '/beer-images/fuller-s-organic-honey-dew.jpg'
+				}
 			]
 		]
 	},
@@ -1002,7 +1055,13 @@ const DATA = {
 			src: 'https://stpetersbrewery.co.uk/'
 		},
 		beers: [
-			["St Peter's Cream Stout", 'Stout - Cream', 6.5, { conf: 'high' }],
+			// image src: https://images.openfoodfacts.org/images/products/068/844/450/0159/front_sv.3.400.jpg
+			[
+				"St Peter's Cream Stout",
+				'Stout - Cream',
+				6.5,
+				{ conf: 'high', image: '/beer-images/st-peter-s-cream-stout.jpg' }
+			],
 			["St Peter's India Pale Ale", 'IPA - English', 5.5, { conf: 'high' }],
 			["St Peter's Ruby Red Ale", 'Red Ale', 4.3, { conf: 'high' }],
 			[
@@ -1028,8 +1087,20 @@ const DATA = {
 				5.2,
 				{ color: 'red-ale', flavor: ['caramel', 'toffee', 'dark-fruit', 'malty'], conf: 'high' }
 			],
-			['Wychwood Hobgoblin Gold', 'Golden Ale', 4.5, { color: 'blonde-ale', conf: 'high' }],
-			['Wychwood Hobgoblin IPA', 'IPA - English', 5.3, { conf: 'high' }],
+			// image src: https://images.openfoodfacts.org/images/products/501/134/801/5194/front_en.4.400.jpg
+			[
+				'Wychwood Hobgoblin Gold',
+				'Golden Ale',
+				4.5,
+				{ color: 'blonde-ale', conf: 'high', image: '/beer-images/wychwood-hobgoblin-gold.jpg' }
+			],
+			// image src: https://images.openfoodfacts.org/images/products/501/134/802/2758/front_en.5.400.jpg
+			[
+				'Wychwood Hobgoblin IPA',
+				'IPA - English',
+				5.3,
+				{ conf: 'high', image: '/beer-images/wychwood-hobgoblin-ipa.jpg' }
+			],
 			[
 				'Wychwood King Goblin',
 				'Strong Ale',
@@ -1093,11 +1164,16 @@ const DATA = {
 			src: 'https://www.guinness.com/'
 		},
 		beers: [
+			// image src: https://images.openfoodfacts.org/images/products/541/021/800/5523/front_fr.3.400.jpg
 			[
 				'Guinness Special Export 8%',
 				'Stout - Foreign Extra',
 				8.0,
-				{ conf: 'high', notes: 'Belgian-market Special Export.' }
+				{
+					conf: 'high',
+					notes: 'Belgian-market Special Export.',
+					image: '/beer-images/guinness-special-export-8.jpg'
+				}
 			]
 		]
 	},
@@ -1163,7 +1239,17 @@ const DATA = {
 					image: '/beer-images/duvel-classic.jpg'
 				}
 			],
-			['Duvel 6.66', 'Belgian Blonde', 6.66, { conf: 'high', notes: 'Lower-strength Duvel.' }],
+			// image src: https://www.duvel.com/files/contentBuilder/_660x825_crop_center-center_82_line/658175/square-duvel-666-glas_2024-10-04-133826_yyuq.png
+			[
+				'Duvel 6.66',
+				'Belgian Blonde',
+				6.66,
+				{
+					conf: 'high',
+					notes: 'Lower-strength Duvel.',
+					image: '/beer-images/duvel-6-66.jpg'
+				}
+			],
 			// image src: https://images.openfoodfacts.org/images/products/541/168/140/1164/front_fr.33.400.jpg
 			[
 				'Duvel Citra',
@@ -1204,23 +1290,41 @@ const DATA = {
 					image: '/beer-images/la-chouffe.jpg'
 				}
 			],
+			// image src: https://chouffe.com/uploads/Beers/Mc-Chouffe/McChouffe_Bottle_33cl_DRY.png
 			[
 				'McChouffe',
 				'Belgian Strong Dark Ale',
 				8.0,
-				{ color: 'brown-ale', flavor: ['dark-fruit', 'caramel', 'spicy', 'malty'], conf: 'high' }
+				{
+					color: 'brown-ale',
+					flavor: ['dark-fruit', 'caramel', 'spicy', 'malty'],
+					conf: 'high',
+					image: '/beer-images/mcchouffe.jpg'
+				}
 			],
+			// image src: https://chouffe.com/uploads/Beers/Chouffe-Cherry/Chouffe_Cherry_33cl_DRY.png
 			[
 				'Cherry Chouffe',
 				'Belgian Fruit Ale - Cherry',
 				8.0,
-				{ color: 'red-ale', flavor: ['cherry', 'fruity', 'sweet', 'spicy'], conf: 'high' }
+				{
+					color: 'red-ale',
+					flavor: ['cherry', 'fruity', 'sweet', 'spicy'],
+					conf: 'high',
+					image: '/beer-images/cherry-chouffe.jpg'
+				}
 			],
+			// image src: https://chouffe.com/uploads/new_ipa_bottle_yellow_cap_372x800-2-1.png
 			[
 				'La Chouffe Houblon IPA',
 				'Belgian IPA (Tripel IPA)',
 				9.0,
-				{ color: 'blonde-ale', flavor: ['citrus', 'floral', 'fruity', 'bitter'], conf: 'high' }
+				{
+					color: 'blonde-ale',
+					flavor: ['citrus', 'floral', 'fruity', 'bitter'],
+					conf: 'high',
+					image: '/beer-images/la-chouffe-houblon-ipa.jpg'
+				}
 			]
 		]
 	},
@@ -1354,29 +1458,53 @@ const DATA = {
 					image: '/beer-images/lindemans-framboise.jpg'
 				}
 			],
+			// image src: https://lindemans.be/cdn/shop/files/Frame_-_US_Cassis_35.5cl.png
 			[
 				'Lindemans Cassis',
 				'Lambic - Blackcurrant',
 				3.5,
-				{ color: 'red-ale', flavor: ['blackcurrant', 'sweet', 'tart', 'fruity'], conf: 'high' }
+				{
+					color: 'red-ale',
+					flavor: ['blackcurrant', 'sweet', 'tart', 'fruity'],
+					conf: 'high',
+					image: '/beer-images/lindemans-cassis.jpg'
+				}
 			],
+			// image src: https://lindemans.be/cdn/shop/files/Frame_-_US_Pecheresse_25cl.png
 			[
 				'Lindemans Peacheresse',
 				'Lambic - Peach',
 				2.5,
-				{ color: 'blonde-ale', flavor: ['peach', 'sweet', 'tart', 'fruity'], conf: 'high' }
+				{
+					color: 'blonde-ale',
+					flavor: ['peach', 'sweet', 'tart', 'fruity'],
+					conf: 'high',
+					image: '/beer-images/lindemans-peacheresse.jpg'
+				}
 			],
+			// image src: https://lindemans.be/cdn/shop/files/Strawberry_25_cl_GLOBAL_landscape-red_d4748f88-44d6-4e28-bcf5-0dc38273c3e4.jpg
 			[
 				'Lindemans Strawberry',
 				'Lambic - Strawberry',
 				2.5,
-				{ color: 'red-ale', flavor: ['strawberry', 'sweet', 'tart', 'fruity'], conf: 'high' }
+				{
+					color: 'red-ale',
+					flavor: ['strawberry', 'sweet', 'tart', 'fruity'],
+					conf: 'high',
+					image: '/beer-images/lindemans-strawberry.jpg'
+				}
 			],
+			// image src: https://lindemans.be/cdn/shop/files/Frame_-_US_Apple_25cl.png
 			[
 				'Lindemans Apple',
 				'Lambic - Apple',
 				3.5,
-				{ color: 'blonde-ale', flavor: ['apple', 'sweet', 'tart', 'crisp'], conf: 'high' }
+				{
+					color: 'blonde-ale',
+					flavor: ['apple', 'sweet', 'tart', 'crisp'],
+					conf: 'high',
+					image: '/beer-images/lindemans-apple.jpg'
+				}
 			]
 		]
 	},
@@ -1401,8 +1529,20 @@ const DATA = {
 					image: '/beer-images/gouden-carolus-classic.jpg'
 				}
 			],
-			['Gouden Carolus Tripel', 'Belgian Tripel', 9.0, { color: 'blonde-ale', conf: 'high' }],
-			['Gouden Carolus Ambrio', 'Belgian Amber', 8.0, { color: 'amber-ale', conf: 'high' }]
+			// image src: https://www.hetanker.be/assets/products/packshot/_AUTOx720_fit_center-center_75_none/packshot-bottle-gc-tripel.png
+			[
+				'Gouden Carolus Tripel',
+				'Belgian Tripel',
+				9.0,
+				{ color: 'blonde-ale', conf: 'high', image: '/beer-images/gouden-carolus-tripel.jpg' }
+			],
+			// image src: https://www.hetanker.be/assets/products/packshot/_AUTOx720_fit_center-center_75_none/packshot-bottle-gc-ambrio.png
+			[
+				'Gouden Carolus Ambrio',
+				'Belgian Amber',
+				8.0,
+				{ color: 'amber-ale', conf: 'high', image: '/beer-images/gouden-carolus-ambrio.jpg' }
+			]
 		]
 	},
 	stbernardus: {
@@ -1512,18 +1652,31 @@ const DATA = {
 			src: 'https://www.trappistes-rochefort.com/en'
 		},
 		beers: [
-			['Rochefort 6', 'Dubbel (Trappist)', 7.5, { color: 'brown-ale', conf: 'high' }],
+			// image src: https://www.trappistes-rochefort.com/wp-content/uploads/2024/06/rochefort_6-840x1680.jpg
+			[
+				'Rochefort 6',
+				'Dubbel (Trappist)',
+				7.5,
+				{ color: 'brown-ale', conf: 'high', image: '/beer-images/rochefort-6.jpg' }
+			],
+			// image src: https://www.trappistes-rochefort.com/wp-content/uploads/2024/06/rochefort_8-840x1680.jpg
 			[
 				'Rochefort 8',
 				'Belgian Strong Dark Ale (Trappist)',
 				9.2,
-				{ color: 'brown-ale', conf: 'high' }
+				{ color: 'brown-ale', conf: 'high', image: '/beer-images/rochefort-8.jpg' }
 			],
+			// image src: https://www.trappistes-rochefort.com/wp-content/uploads/2024/06/rochefort_10-840x1680.jpg
 			[
 				'Rochefort 10',
 				'Quadrupel (Trappist)',
 				11.3,
-				{ color: 'brown-ale', flavor: ['dark-fruit', 'caramel', 'port', 'warming'], conf: 'high' }
+				{
+					color: 'brown-ale',
+					flavor: ['dark-fruit', 'caramel', 'port', 'warming'],
+					conf: 'high',
+					image: '/beer-images/rochefort-10.jpg'
+				}
 			]
 		]
 	},
@@ -1536,8 +1689,20 @@ const DATA = {
 			src: 'name+knowledge'
 		},
 		beers: [
-			['Corsendonk Agnus (Tripel)', 'Belgian Tripel', 7.5, { color: 'blonde-ale', conf: 'medium' }],
-			['Corsendonk Blanche', 'Witbier', 4.8, { color: 'blonde-ale', conf: 'medium' }],
+			// image src: https://www.corsendonk.com/images/beers/image/6/corsendonk-agnus-tripel.jpg
+			[
+				'Corsendonk Agnus (Tripel)',
+				'Belgian Tripel',
+				7.5,
+				{ color: 'blonde-ale', conf: 'medium', image: '/beer-images/corsendonk-agnus-tripel.jpg' }
+			],
+			// image src: https://www.corsendonk.com/images/beers/image/16/corsendonk-blanche.jpg
+			[
+				'Corsendonk Blanche',
+				'Witbier',
+				4.8,
+				{ color: 'blonde-ale', conf: 'medium', image: '/beer-images/corsendonk-blanche.jpg' }
+			],
 			['Corsendonk Gold Tripel', 'Belgian Tripel', 8.5, { color: 'blonde-ale', conf: 'medium' }]
 		]
 	},
@@ -2308,24 +2473,51 @@ const DATA = {
 					image: '/beer-images/weihenstephaner-vitus.jpg'
 				}
 			],
+			// image src: https://www.weihenstephaner.com/strapi/uploads/Korbinian_a4c774ed99.png
 			[
 				'Weihenstephaner Korbinian',
 				'Doppelbock',
 				7.4,
-				{ color: 'brown-ale', flavor: ['caramel', 'dark-fruit', 'malty', 'warming'], conf: 'high' }
+				{
+					color: 'brown-ale',
+					flavor: ['caramel', 'dark-fruit', 'malty', 'warming'],
+					conf: 'high',
+					image: '/beer-images/weihenstephaner-korbinian.jpg'
+				}
 			],
+			// image src: https://www.weihenstephaner.com/strapi/uploads/HWB_dunkel_ba4356a49e.png
 			[
 				'Weihenstephaner Hefe Dunkel',
 				'Dunkelweizen',
 				5.3,
-				{ color: 'brown-ale', flavor: ['banana', 'clove', 'caramel', 'malty'], conf: 'high' }
+				{
+					color: 'brown-ale',
+					flavor: ['banana', 'clove', 'caramel', 'malty'],
+					conf: 'high',
+					image: '/beer-images/weihenstephaner-hefe-dunkel.jpg'
+				}
 			],
-			['Weihenstephaner Original Helles', 'Helles', 5.1, { color: 'pale-lager', conf: 'high' }],
+			// image src: https://www.weihenstephaner.com/strapi/uploads/Original_3f51db30db.png
+			[
+				'Weihenstephaner Original Helles',
+				'Helles',
+				5.1,
+				{
+					color: 'pale-lager',
+					conf: 'high',
+					image: '/beer-images/weihenstephaner-original-helles.jpg'
+				}
+			],
+			// image src: https://www.weihenstephaner.com/strapi/uploads/HWB_alkfrei_09015e2f39.png
 			[
 				'Weihenstephaner Alkoholfrei Weiss',
 				'Hefeweizen - Non-Alcoholic',
 				0.5,
-				{ color: 'blonde-ale', conf: 'high' }
+				{
+					color: 'blonde-ale',
+					conf: 'high',
+					image: '/beer-images/weihenstephaner-alkoholfrei-weiss.jpg'
+				}
 			]
 		]
 	},
@@ -2361,11 +2553,17 @@ const DATA = {
 			src: 'https://www.maisel.com/en/'
 		},
 		beers: [
+			// image src: https://www.maisel.com/wp-content/uploads/2020/04/mwo-flasche-glas-305x640.png
 			[
 				"Maisel's Weisse Original",
 				'Hefeweizen',
 				5.2,
-				{ color: 'blonde-ale', flavor: ['banana', 'clove', 'wheat', 'soft'], conf: 'high' }
+				{
+					color: 'blonde-ale',
+					flavor: ['banana', 'clove', 'wheat', 'soft'],
+					conf: 'high',
+					image: '/beer-images/maisel-s-weisse-original.jpg'
+				}
 			]
 		]
 	},
@@ -2378,6 +2576,7 @@ const DATA = {
 			src: 'https://schneider-weisse.de/en/'
 		},
 		beers: [
+			// image src: https://schneider-weisse.de/sites/default/files/2023-06/Schneider-Weisse-ProduktDuo-Eisbock-2023-web.png (official Aventinus Eisbock bottle, closest match for this Weizen-Eisbock variant)
 			[
 				'Schneider Aventinus Weizen-Eisbock (Tap 10)',
 				'Weizen-Eisbock',
@@ -2385,7 +2584,8 @@ const DATA = {
 				{
 					color: 'brown-ale',
 					flavor: ['dark-fruit', 'plum', 'raisin', 'banana', 'warming'],
-					conf: 'high'
+					conf: 'high',
+					image: '/beer-images/schneider-aventinus-weizen-eisbock-tap-10.jpg'
 				}
 			],
 			// image src: https://images.openfoodfacts.org/images/products/400/366/901/8207/front_fr.4.400.jpg
@@ -2436,6 +2636,7 @@ const DATA = {
 			src: 'https://www.schloss-eggenberg.at/en/'
 		},
 		beers: [
+			// image src: https://schloss-eggenberg.at/wp-content/uploads/2024/05/Samichlaus-Classic_033l_mitGlas_2025_1704x2118px.png
 			[
 				'Samichlaus Bier',
 				'Strong Lager / Doppelbock',
@@ -2444,7 +2645,8 @@ const DATA = {
 					color: 'amber-ale',
 					flavor: ['caramel', 'toffee', 'dark-fruit', 'boozy', 'malty'],
 					conf: 'high',
-					notes: 'Brewed once a year, Dec 6th.'
+					notes: 'Brewed once a year, Dec 6th.',
+					image: '/beer-images/samichlaus-bier.jpg'
 				}
 			]
 		]
