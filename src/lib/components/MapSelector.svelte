@@ -171,10 +171,10 @@
 							aria-pressed={isSelected(marker.id)}
 						>
 							<span
-								class="absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full shrink-0 flex items-center justify-center font-fredoka font-black text-white leading-none transition-all duration-150 group-focus-visible:ring-2 group-focus-visible:ring-offset-2 group-focus-visible:ring-brand-green
+								class="absolute z-10 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full shrink-0 flex items-center justify-center font-fredoka font-black text-[8px] leading-none transition-all duration-150 group-focus-visible:ring-2 group-focus-visible:ring-offset-2 group-focus-visible:ring-brand-green
 									{isSelected(marker.id)
-									? 'bg-brand-green ring-4 ring-brand-green/40 scale-125 w-5 h-5 text-[9px]'
-									: 'bg-brand-pink animate-pulse w-4 h-4 text-[8px]'}"
+									? 'bg-brand-green ring-4 ring-brand-green/40 scale-[2] text-black'
+									: 'bg-brand-pink animate-pulse text-white'}"
 							>
 								{count ?? ''}
 							</span>
