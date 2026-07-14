@@ -8,7 +8,14 @@
 	import BeerCard from '$lib/components/BeerCard.svelte';
 	import { translations } from '$lib/i18n';
 	import type { Locale } from '$lib/i18n';
-	import { beers, filterBeer, loadBeers, countByType, countByColor } from '$lib/data/beers';
+	import {
+		beers,
+		filterBeer,
+		loadBeers,
+		countByType,
+		countByColor,
+		countByAbv
+	} from '$lib/data/beers';
 	import type { Beer, TypeId, ColorId, AbvId, CountryId, CityId } from '$lib/data/beers';
 
 	type Mode = 'quiz' | 'country' | 'style' | 'random';
@@ -46,6 +53,7 @@
 	// Recomputes once beersReady flips true (beers[] is populated by then).
 	let typeCounts = $derived(beersReady ? countByType() : null);
 	let colorCounts = $derived(beersReady ? countByColor(answers.type) : null);
+	let abvCounts = $derived(beersReady ? countByAbv(answers.type, answers.color) : null);
 
 	const TYPE_OPTIONS: TypeId[] = ['aromatic', 'bitter', 'fruity', 'gluten-free', 'crispy', 'wheat'];
 	const MODE_OPTIONS: { id: Mode; emoji: string }[] = [
@@ -294,6 +302,7 @@
 										onclick={() => {
 											answers.type = typeId;
 											answers.color = '';
+											answers.abv = '';
 											if (mode === 'style') {
 												goTo(6);
 												return;
@@ -334,7 +343,10 @@
 							<BeerGlass
 								selected={answers.color}
 								counts={colorCounts}
-								onselect={(c) => (answers.color = c)}
+								onselect={(c) => {
+									answers.color = c;
+									answers.abv = '';
+								}}
 							/>
 							<button
 								onclick={() => goTo(4)}
@@ -353,7 +365,11 @@
 							>
 								{t.q3.question}
 							</h2>
-							<ABVSelector selected={answers.abv} onselect={(a) => (answers.abv = a)} />
+							<ABVSelector
+								selected={answers.abv}
+								counts={abvCounts}
+								onselect={(a) => (answers.abv = a)}
+							/>
 							<button
 								onclick={() => goTo(5)}
 								disabled={!answers.abv}

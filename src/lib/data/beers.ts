@@ -512,21 +512,40 @@ export function countByColor(type: TypeId | '' = ''): Record<ColorId, number> {
 	return counts;
 }
 
+// Buckets on the rounded whole-percent value so every real (decimal) abv falls into
+// exactly one range - the raw comparisons used to leave gaps (e.g. 4.5, 5.5, 8.5, 10.5
+// matched nothing), which is why q3's badge totals came up short of q2's.
 function abvInRange(abv: number, range: AbvId): boolean {
+	const rounded = Math.round(abv);
 	switch (range) {
 		case '0':
-			return abv === 0;
+			return rounded === 0;
 		case '4':
-			return abv <= 4;
+			return rounded >= 1 && rounded <= 4;
 		case '5':
-			return abv === 5;
+			return rounded === 5;
 		case '6-8':
-			return abv >= 6 && abv <= 8;
+			return rounded >= 6 && rounded <= 8;
 		case '9-10':
-			return abv >= 9 && abv <= 10;
+			return rounded >= 9 && rounded <= 10;
 		case '11+':
-			return abv >= 11;
+			return rounded >= 11;
 	}
+}
+
+// How many loaded beers fall in each ABV bucket, optionally pre-filtered by the q1
+// type and q2 color answers so q3 only offers ABV ranges that exist for that
+// type+color combo. Used to badge the q3 circles and hatch out (X) empty ones.
+export function countByAbv(type: TypeId | '' = '', color: ColorId | '' = ''): Record<AbvId, number> {
+	const counts: Record<AbvId, number> = { '0': 0, '4': 0, '5': 0, '6-8': 0, '9-10': 0, '11+': 0 };
+	for (const b of beers) {
+		if (type && !b.types.includes(type)) continue;
+		if (color && b.color !== color) continue;
+		for (const range of Object.keys(counts) as AbvId[]) {
+			if (abvInRange(b.abv, range)) counts[range]++;
+		}
+	}
+	return counts;
 }
 
 export function filterBeer(answers: Answers): Beer {
