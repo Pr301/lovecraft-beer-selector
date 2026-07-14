@@ -536,7 +536,10 @@ function abvInRange(abv: number, range: AbvId): boolean {
 // How many loaded beers fall in each ABV bucket, optionally pre-filtered by the q1
 // type and q2 color answers so q3 only offers ABV ranges that exist for that
 // type+color combo. Used to badge the q3 circles and hatch out (X) empty ones.
-export function countByAbv(type: TypeId | '' = '', color: ColorId | '' = ''): Record<AbvId, number> {
+export function countByAbv(
+	type: TypeId | '' = '',
+	color: ColorId | '' = ''
+): Record<AbvId, number> {
 	const counts: Record<AbvId, number> = { '0': 0, '4': 0, '5': 0, '6-8': 0, '9-10': 0, '11+': 0 };
 	for (const b of beers) {
 		if (type && !b.types.includes(type)) continue;
@@ -544,6 +547,78 @@ export function countByAbv(type: TypeId | '' = '', color: ColorId | '' = ''): Re
 		for (const range of Object.keys(counts) as AbvId[]) {
 			if (abvInRange(b.abv, range)) counts[range]++;
 		}
+	}
+	return counts;
+}
+
+// How many loaded beers land in each country, pre-filtered by the q1/q2/q3 answers so
+// q4's map only shows locations that still have a matching beer. Used to hide markers
+// and the worldwide/greece shortcut buttons for locations with nothing left.
+export function countByCountry(
+	type: TypeId | '' = '',
+	color: ColorId | '' = '',
+	abv: AbvId | '' = ''
+): Record<CountryId, number> {
+	const counts: Record<CountryId, number> = {
+		greece: 0,
+		germany: 0,
+		belgium: 0,
+		netherlands: 0,
+		czech: 0,
+		poland: 0,
+		bulgaria: 0,
+		hungary: 0,
+		latvia: 0,
+		sweden: 0,
+		austria: 0,
+		italy: 0,
+		uk: 0,
+		ireland: 0,
+		usa: 0,
+		mexico: 0,
+		cyprus: 0,
+		other: 0
+	};
+	for (const b of beers) {
+		if (type && !b.types.includes(type)) continue;
+		if (color && b.color !== color) continue;
+		if (abv && !abvInRange(b.abv, abv)) continue;
+		counts[b.country]++;
+	}
+	return counts;
+}
+
+const CITY_IDS: CityId[] = [
+	'athens',
+	'thessaloniki',
+	'heraklion',
+	'serres',
+	'evia',
+	'corfu',
+	'chios',
+	'attica',
+	'folegandros',
+	'patras',
+	'rethymno',
+	'samothraki',
+	'chalkidiki'
+];
+
+// How many loaded Greek beers land in each of the map's known cities, pre-filtered by
+// the q1/q2/q3 answers. Only Greece has city-level markers, so beers from other
+// countries (and Greek beers with an unrecognized city slug) never contribute here.
+export function countByCity(
+	type: TypeId | '' = '',
+	color: ColorId | '' = '',
+	abv: AbvId | '' = ''
+): Record<CityId, number> {
+	const counts = Object.fromEntries(CITY_IDS.map((id) => [id, 0])) as Record<CityId, number>;
+	for (const b of beers) {
+		if (b.country !== 'greece') continue;
+		if (type && !b.types.includes(type)) continue;
+		if (color && b.color !== color) continue;
+		if (abv && !abvInRange(b.abv, abv)) continue;
+		if (b.city && (CITY_IDS as string[]).includes(b.city)) counts[b.city as CityId]++;
 	}
 	return counts;
 }

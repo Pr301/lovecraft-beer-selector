@@ -14,7 +14,9 @@
 		loadBeers,
 		countByType,
 		countByColor,
-		countByAbv
+		countByAbv,
+		countByCountry,
+		countByCity
 	} from '$lib/data/beers';
 	import type { Beer, TypeId, ColorId, AbvId, CountryId, CityId } from '$lib/data/beers';
 
@@ -54,6 +56,12 @@
 	let typeCounts = $derived(beersReady ? countByType() : null);
 	let colorCounts = $derived(beersReady ? countByColor(answers.type) : null);
 	let abvCounts = $derived(beersReady ? countByAbv(answers.type, answers.color) : null);
+	let countryCounts = $derived(
+		beersReady ? countByCountry(answers.type, answers.color, answers.abv) : null
+	);
+	let cityCounts = $derived(
+		beersReady ? countByCity(answers.type, answers.color, answers.abv) : null
+	);
 
 	const TYPE_OPTIONS: TypeId[] = ['aromatic', 'bitter', 'fruity', 'gluten-free', 'crispy', 'wheat'];
 	const MODE_OPTIONS: { id: Mode; emoji: string }[] = [
@@ -247,12 +255,7 @@
 			</div>
 		{/key}
 	{:else}
-		<QuestionLayout
-			onback={handleBack}
-			backLabel={t.back}
-			onhome={reset}
-			homeLabel={t.home}
-		>
+		<QuestionLayout onback={handleBack} backLabel={t.back} onhome={reset} homeLabel={t.home}>
 			{#key step}
 				<div
 					class="absolute inset-0 overflow-hidden"
@@ -400,6 +403,8 @@
 								country={answers.country}
 								city={answers.city}
 								labels={t.q4}
+								{countryCounts}
+								{cityCounts}
 								onselect={(sel) => {
 									answers.country = sel.country;
 									answers.city = sel.city;

@@ -9,20 +9,43 @@
 		country = '',
 		city = '',
 		labels,
+		countryCounts = null,
+		cityCounts = null,
 		onselect
 	}: {
 		country: CountryId | '';
 		city: CityId | '';
 		labels: Translations['q4'];
+		countryCounts?: Record<CountryId, number> | null;
+		cityCounts?: Record<CityId, number> | null;
 		onselect: (sel: { country: CountryId | ''; city: CityId | '' }) => void;
 	} = $props();
 
 	const WORLD_COUNTRIES: CountryId[] = ['usa', 'mexico', 'cyprus'];
 	const DEPTH: Record<MapView, number> = { world: 0, europe: 1, greece: 2 };
 
+	// True while counts aren't loaded yet, or a matching beer still exists there —
+	// same "show everything until we know better" fallback as BeerGlass/ABVSelector.
+	let worldAvailable = $derived(
+		!countryCounts || WORLD_COUNTRIES.some((id) => countryCounts![id] > 0)
+	);
+	let europeAvailable = $derived(
+		!countryCounts ||
+			Object.entries(countryCounts).some(
+				([id, n]) => n > 0 && !WORLD_COUNTRIES.includes(id as CountryId)
+			)
+	);
+	let greeceAvailable = $derived(!countryCounts || countryCounts.greece > 0);
+	let onlyGreek = $derived(
+		!!countryCounts &&
+			countryCounts.greece > 0 &&
+			Object.entries(countryCounts).every(([id, n]) => id === 'greece' || n === 0)
+	);
+
 	function initialView(): MapView {
 		if (city) return 'greece';
 		if (country && WORLD_COUNTRIES.includes(country)) return 'world';
+		if (!country && onlyGreek) return 'greece';
 		return 'europe';
 	}
 
@@ -31,6 +54,13 @@
 
 	let map = $derived(maps[view]);
 	let mapSrc = $derived(`data:image/svg+xml;utf8,${encodeURIComponent(map.svg)}`);
+	let visibleMarkers = $derived(
+		map.markers.filter((marker) => {
+			if (view === 'greece') return !cityCounts || cityCounts[marker.id as CityId] > 0;
+			if (marker.id === 'europe') return europeAvailable;
+			return !countryCounts || countryCounts[marker.id as CountryId] > 0;
+		})
+	);
 
 	function zoomTo(v: MapView) {
 		zoomingIn = DEPTH[v] > DEPTH[view];
@@ -101,7 +131,7 @@
 						class="absolute inset-0 w-full h-full select-none"
 					/>
 
-					{#each map.markers as marker (marker.id)}
+					{#each visibleMarkers as marker (marker.id)}
 						<button
 							onclick={() => clickMarker(marker.id)}
 							class="group absolute"
@@ -130,20 +160,24 @@
 
 		{#if view === 'europe'}
 			<div class="absolute bottom-2 right-2 flex flex-col items-end gap-2">
-				<button
-					onclick={() => zoomTo('greece')}
-					class="bg-brand-pink font-fredoka font-black text-sm text-white px-4 py-1.5 rounded-full"
-				>
-					🇬🇷 {labels.countries.greece}
-				</button>
-				<button
-					onclick={() => zoomTo('world')}
-					class="bg-brand-pink font-fredoka font-black text-sm text-white px-4 py-1.5 rounded-full"
-				>
-					🌐 {labels.worldwide}
-				</button>
+				{#if greeceAvailable}
+					<button
+						onclick={() => zoomTo('greece')}
+						class="bg-brand-pink font-fredoka font-black text-sm text-white px-4 py-1.5 rounded-full"
+					>
+						🇬🇷 {labels.countries.greece}
+					</button>
+				{/if}
+				{#if worldAvailable}
+					<button
+						onclick={() => zoomTo('world')}
+						class="bg-brand-pink font-fredoka font-black text-sm text-white px-4 py-1.5 rounded-full"
+					>
+						🌐 {labels.worldwide}
+					</button>
+				{/if}
 			</div>
-		{:else if view === 'greece'}
+		{:else if view === 'greece' && !onlyGreek}
 			<button
 				onclick={() => zoomTo('europe')}
 				class="absolute bottom-2 right-2 bg-brand-pink font-fredoka font-black text-sm text-white px-4 py-1.5 rounded-full"
