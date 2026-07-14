@@ -96,6 +96,8 @@ export const translations = {
 		},
 		result: {
 			title: 'Your Beer Is:',
+			matchesTitle: 'Your Matches:',
+			empty: 'No beers match all your answers.',
 			explore: 'Explore more beers',
 			abv: 'ABV',
 			ibu: 'IBU'
@@ -196,6 +198,8 @@ export const translations = {
 		},
 		result: {
 			title: 'Η μπύρα σου είναι:',
+			matchesTitle: 'Οι μπύρες σου:',
+			empty: 'Καμία μπύρα δεν ταιριάζει σε όλες τις επιλογές σου.',
 			explore: 'Εξερεύνησε περισσότερες',
 			abv: 'ABV',
 			ibu: 'IBU'

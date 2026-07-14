@@ -623,6 +623,18 @@ export function countByCity(
 	return counts;
 }
 
+export function filterBeers(answers: Answers): Beer[] {
+	const { type, color, abv, country, city } = answers;
+	return beers.filter(
+		(b) =>
+			(!type || b.types.includes(type)) &&
+			(!color || b.color === color) &&
+			(!abv || abvInRange(b.abv, abv)) &&
+			(!country || b.country === country) &&
+			(!city || b.city === city)
+	);
+}
+
 export function filterBeer(answers: Answers): Beer {
 	const { type, color, abv, country, city } = answers;
 

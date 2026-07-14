@@ -11,6 +11,7 @@
 	import {
 		beers,
 		filterBeer,
+		filterBeers,
 		loadBeers,
 		countByType,
 		countByColor,
@@ -52,6 +53,7 @@
 
 	let t = $derived(translations[locale]);
 	let result = $derived(mode === 'random' && randomBeer ? randomBeer : filterBeer(answers));
+	let matches = $derived(filterBeers(answers));
 	// Recomputes once beersReady flips true (beers[] is populated by then).
 	let typeCounts = $derived(beersReady ? countByType() : null);
 	let colorCounts = $derived(beersReady ? countByColor(answers.type) : null);
@@ -515,8 +517,8 @@
 								</button>
 							{/if}
 						</div>
-					{:else if step === 6}
-						<!-- Result -->
+					{:else if step === 6 && mode === 'random'}
+						<!-- Result: random mode always shows the one picked beer -->
 						<div class="w-full max-w-xl mx-auto flex flex-col gap-4">
 							<h2
 								class="font-fredoka font-black text-brand-pink text-center shrink-0"
@@ -525,6 +527,35 @@
 								{t.result.title}
 							</h2>
 							<BeerCard beer={result} {locale} />
+							<button
+								onclick={reset}
+								class="bg-brand-pink font-fredoka font-black text-2xl text-white py-3 rounded-full w-full shrink-0"
+							>
+								{t.result.explore}
+							</button>
+						</div>
+					{:else if step === 6}
+						<!-- Result: every beer matching all the given answers -->
+						<div class="w-full h-full max-w-xl mx-auto flex flex-col gap-4">
+							<h2
+								class="font-fredoka font-black text-brand-pink text-center shrink-0"
+								style="font-size: clamp(2rem, 10vw, 3rem)"
+							>
+								{t.result.matchesTitle}
+							</h2>
+							{#if matches.length === 0}
+								<p class="font-fredoka font-black text-lg text-gray-400 text-center">
+									{t.result.empty}
+								</p>
+							{:else}
+								<div class="overflow-x-auto flex flex-row gap-4">
+									{#each matches as beer (beer.id)}
+										<div class="w-2/3 shrink-0">
+											<BeerCard {beer} {locale} />
+										</div>
+									{/each}
+								</div>
+							{/if}
 							<button
 								onclick={reset}
 								class="bg-brand-pink font-fredoka font-black text-2xl text-white py-3 rounded-full w-full shrink-0"
