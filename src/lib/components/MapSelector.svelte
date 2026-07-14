@@ -83,15 +83,21 @@
 		switch (pos) {
 			case 'top':
 				return selected
-					? 'left-1/2 bottom-6 -translate-x-1/2'
+					? 'left-1/2 bottom-[29px] -translate-x-1/2'
 					: 'left-1/2 bottom-1.5 -translate-x-1/2';
 			case 'left':
-				return selected ? 'right-6 top-1/2 -translate-y-1/2' : 'right-1.5 top-1/2 -translate-y-1/2';
+				return selected
+					? 'right-[29px] top-1/2 -translate-y-1/2'
+					: 'right-1.5 top-1/2 -translate-y-1/2';
 			case 'right':
-				return selected ? 'left-6 top-1/2 -translate-y-1/2' : 'left-1.5 top-1/2 -translate-y-1/2';
+				return selected
+					? 'left-[29px] top-1/2 -translate-y-1/2'
+					: 'left-1.5 top-1/2 -translate-y-1/2';
 			case 'bottom':
 			default:
-				return selected ? 'left-1/2 top-6 -translate-x-1/2' : 'left-1/2 top-1.5 -translate-x-1/2';
+				return selected
+					? 'left-1/2 top-[29px] -translate-x-1/2'
+					: 'left-1/2 top-1.5 -translate-x-1/2';
 		}
 	}
 
@@ -184,8 +190,8 @@
 								{count ?? ''}
 							</span>
 							<span
-								class="absolute z-0 whitespace-nowrap font-fredoka font-black leading-tight px-1.5 py-0.5 rounded-full bg-white/85 transition-all duration-150
-									{selected ? 'text-brand-green text-2xl' : 'text-brand-pink text-xs'}
+								class="absolute z-0 whitespace-nowrap font-fredoka font-black leading-tight px-1.5 py-0.5 rounded-full transition-all duration-150
+									{selected ? 'bg-brand-green text-black text-2xl' : 'bg-white/85 text-brand-pink text-xs'}
 									{labelPosClasses(marker.labelPos, selected)}"
 							>
 								{markerLabel(marker.id)}
