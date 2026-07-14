@@ -97,6 +97,15 @@
 		return country === id;
 	}
 
+	// Count badge appended after the name, inside the same label pill, so it only
+	// grows the pill in the direction labelPos already reserves as open space.
+	// The synthetic "europe" marker has no single count of its own.
+	function markerCount(id: string): number | undefined {
+		if (id === 'europe') return undefined;
+		if (view === 'greece') return cityCounts?.[id as CityId];
+		return countryCounts?.[id as CountryId];
+	}
+
 	function clickMarker(id: string) {
 		if (view === 'greece') {
 			onselect({ country: 'greece', city: id as CityId });
@@ -132,11 +141,14 @@
 					/>
 
 					{#each visibleMarkers as marker (marker.id)}
+						{@const count = markerCount(marker.id)}
 						<button
 							onclick={() => clickMarker(marker.id)}
 							class="group absolute"
 							style="left: {marker.xPct}%; top: {marker.yPct}%; width: 0; height: 0; overflow: visible"
-							aria-label={markerLabel(marker.id)}
+							aria-label={count != null
+								? `${markerLabel(marker.id)}, ${count}`
+								: markerLabel(marker.id)}
 							aria-pressed={isSelected(marker.id)}
 						>
 							<span
@@ -146,11 +158,19 @@
 									: 'bg-brand-pink animate-pulse'}"
 							></span>
 							<span
-								class="absolute z-0 whitespace-nowrap font-fredoka font-black text-xs leading-tight px-1.5 py-0.5 rounded-full bg-white/85
+								class="absolute z-0 flex items-center gap-1 whitespace-nowrap font-fredoka font-black text-xs leading-tight px-1.5 py-0.5 rounded-full bg-white/85
 									{isSelected(marker.id) ? 'text-brand-green' : 'text-brand-pink'}
 									{labelPosClasses(marker.labelPos)}"
 							>
-								{markerLabel(marker.id)}
+								<span>{markerLabel(marker.id)}</span>
+								{#if count != null}
+									<span
+										class="grid place-items-center min-w-[1.1rem] h-[1.1rem] px-1 rounded-full text-[9px] text-white shrink-0
+											{isSelected(marker.id) ? 'bg-brand-green' : 'bg-brand-pink'}"
+									>
+										{count}
+									</span>
+								{/if}
 							</span>
 						</button>
 					{/each}
