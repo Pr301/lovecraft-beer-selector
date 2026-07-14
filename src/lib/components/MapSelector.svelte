@@ -76,18 +76,22 @@
 
 	// Label sits outside the (zero-size) marker anchor on the given side, so the
 	// dot itself stays pinned exactly at the marker's true xPct/yPct regardless
-	// of which way its label is pushed to avoid a neighbor's label.
-	function labelPosClasses(pos: LabelPos): string {
+	// of which way its label is pushed to avoid a neighbor's label. Selected
+	// markers push the label further out, since the dot doubles in size and
+	// the label's own text doubles too.
+	function labelPosClasses(pos: LabelPos, selected: boolean): string {
 		switch (pos) {
 			case 'top':
-				return 'left-1/2 bottom-1.5 -translate-x-1/2';
+				return selected
+					? 'left-1/2 bottom-6 -translate-x-1/2'
+					: 'left-1/2 bottom-1.5 -translate-x-1/2';
 			case 'left':
-				return 'right-1.5 top-1/2 -translate-y-1/2';
+				return selected ? 'right-6 top-1/2 -translate-y-1/2' : 'right-1.5 top-1/2 -translate-y-1/2';
 			case 'right':
-				return 'left-1.5 top-1/2 -translate-y-1/2';
+				return selected ? 'left-6 top-1/2 -translate-y-1/2' : 'left-1.5 top-1/2 -translate-y-1/2';
 			case 'bottom':
 			default:
-				return 'left-1/2 top-1.5 -translate-x-1/2';
+				return selected ? 'left-1/2 top-6 -translate-x-1/2' : 'left-1/2 top-1.5 -translate-x-1/2';
 		}
 	}
 
@@ -161,6 +165,7 @@
 
 					{#each visibleMarkers as marker (marker.id)}
 						{@const count = markerCount(marker.id)}
+						{@const selected = isSelected(marker.id)}
 						<button
 							onclick={() => clickMarker(marker.id)}
 							class="group absolute"
@@ -168,20 +173,20 @@
 							aria-label={count != null
 								? `${markerLabel(marker.id)}, ${count}`
 								: markerLabel(marker.id)}
-							aria-pressed={isSelected(marker.id)}
+							aria-pressed={selected}
 						>
 							<span
 								class="absolute z-10 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full shrink-0 flex items-center justify-center font-fredoka font-black text-[8px] leading-none transition-all duration-150 group-focus-visible:ring-2 group-focus-visible:ring-offset-2 group-focus-visible:ring-brand-green
-									{isSelected(marker.id)
+									{selected
 									? 'bg-brand-green ring-4 ring-brand-green/40 scale-[2] text-black'
 									: 'bg-brand-pink animate-pulse text-white'}"
 							>
 								{count ?? ''}
 							</span>
 							<span
-								class="absolute z-0 whitespace-nowrap font-fredoka font-black text-xs leading-tight px-1.5 py-0.5 rounded-full bg-white/85
-									{isSelected(marker.id) ? 'text-brand-green' : 'text-brand-pink'}
-									{labelPosClasses(marker.labelPos)}"
+								class="absolute z-0 whitespace-nowrap font-fredoka font-black leading-tight px-1.5 py-0.5 rounded-full bg-white/85 transition-all duration-150
+									{selected ? 'text-brand-green text-2xl' : 'text-brand-pink text-xs'}
+									{labelPosClasses(marker.labelPos, selected)}"
 							>
 								{markerLabel(marker.id)}
 							</span>
