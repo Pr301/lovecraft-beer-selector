@@ -83,6 +83,7 @@ export interface Beer {
 	flavor: string[];
 	notes?: string;
 	styleGuideline?: StyleGuideline;
+	image: string | null;
 }
 
 export interface Answers {
@@ -145,6 +146,7 @@ interface RawBeer {
 	gluten_free: boolean | null;
 	notes: string;
 	style_guideline: StyleGuideline | null;
+	image: string | null;
 }
 
 const COUNTRY_SLUG: Record<string, CountryId> = {
@@ -459,7 +461,8 @@ function mapRawBeer(raw: RawBeer): Beer {
 		types: deriveTypes(raw),
 		flavor: raw.flavor,
 		notes: raw.notes || undefined,
-		styleGuideline: raw.style_guideline ?? undefined
+		styleGuideline: raw.style_guideline ?? undefined,
+		image: raw.image ?? null
 	};
 }
 

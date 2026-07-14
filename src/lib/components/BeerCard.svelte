@@ -1,23 +1,31 @@
 <script lang="ts">
-	import type { Beer } from '$lib/data/beers'
-	import { colorMeta, countryMeta } from '$lib/data/beers'
-	import type { Locale } from '$lib/i18n'
+	import type { Beer } from '$lib/data/beers';
+	import { colorMeta, countryMeta } from '$lib/data/beers';
+	import type { Locale } from '$lib/i18n';
 
 	// `locale` is accepted for API compatibility; card content is language-neutral.
-	let { beer }: { beer: Beer; locale?: Locale } = $props()
+	let { beer }: { beer: Beer; locale?: Locale } = $props();
 
-	let color = $derived(colorMeta[beer.color])
-	let country = $derived(countryMeta[beer.country])
+	let color = $derived(colorMeta[beer.color]);
+	let country = $derived(countryMeta[beer.country]);
 </script>
 
 <div class="bg-brand-green rounded-3xl p-4 w-full">
 	<!-- Header: image + name + brewery -->
 	<div class="bg-white rounded-2xl p-3 flex gap-3 items-start">
-		<div
-			class="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center shrink-0 text-4xl"
-		>
-			🍺
-		</div>
+		{#if beer.image}
+			<img
+				src={beer.image}
+				alt={beer.name}
+				class="w-16 h-16 rounded-xl object-cover shrink-0 bg-gray-100"
+			/>
+		{:else}
+			<div
+				class="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center shrink-0 text-4xl"
+			>
+				🍺
+			</div>
+		{/if}
 		<div class="min-w-0">
 			<h3 class="font-fredoka font-black text-xl leading-tight truncate">{beer.name}</h3>
 			<p class="text-orange-500 font-bold text-sm">{beer.brewery}</p>
