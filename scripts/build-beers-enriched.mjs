@@ -926,7 +926,13 @@ const DATA = {
 					image: '/beer-images/brewdog-hazy-jane-guava.jpg'
 				}
 			],
-			['BrewDog Double Hazy Jane', 'IPA - Double / Hazy', 8.2, { conf: 'medium' }],
+			// image src: https://brewdog.com/cdn/shop/files/FRESH_PDP_DOUBLEHAZY_440.png
+			[
+				'BrewDog Double Hazy Jane',
+				'IPA - Double / Hazy',
+				8.2,
+				{ conf: 'medium', image: '/beer-images/brewdog-double-hazy-jane.jpg' }
+			],
 			// image src: https://brewdog.com/cdn/shop/files/jack_hammer1_21d59b9a-524f-4326-966d-c887d729eec9.png
 			[
 				'BrewDog Jack Hammer',
@@ -934,7 +940,13 @@ const DATA = {
 				7.2,
 				{ conf: 'high', image: '/beer-images/brewdog-jack-hammer.jpg' }
 			],
-			['BrewDog Counter Strike', 'IPA', 6.0, { conf: 'low', notes: 'ABV estimated.' }],
+			// image src: https://brewdog.com/cdn/shop/files/Counter_Strike_-_PDP_2.png
+			[
+				'BrewDog Counter Strike',
+				'IPA',
+				6.0,
+				{ conf: 'low', notes: 'ABV estimated.', image: '/beer-images/brewdog-counter-strike.jpg' }
+			],
 			// image src: https://images.openfoodfacts.org/images/products/505/602/547/7063/front_en.3.400.jpg
 			[
 				'BrewDog Cold Beer (Gluten Free)',
@@ -972,6 +984,7 @@ const DATA = {
 				7.2,
 				{ conf: 'medium', image: '/beer-images/brewdog-hoppy-christmas.jpg' }
 			],
+			// image src: https://brewdog.com/cdn/shop/files/TwoScoops-BrewDogxMackie_s-PDP1.png
 			[
 				'BrewDog Two Scoops (Mackies collab)',
 				'IPA - Fruited',
@@ -979,7 +992,8 @@ const DATA = {
 				{
 					flavor: ['raspberry', 'vanilla', 'sweet', 'juicy'],
 					conf: 'low',
-					notes: 'Mackies ice-cream collab.'
+					notes: 'Mackies ice-cream collab.',
+					image: '/beer-images/brewdog-two-scoops-mackies-collab.jpg'
 				}
 			]
 		]
@@ -993,7 +1007,13 @@ const DATA = {
 			src: 'https://www.carlowbrewing.com/'
 		},
 		beers: [
-			["O'Hara's Nitro Irish Stout", 'Stout - Irish (Nitro)', 4.3, { conf: 'high' }],
+			// image src: https://carlowbrewing.com/wp-content/uploads/2021/03/OHIS-Stout-500ml_ROW-Final-e1614863294335.png
+			[
+				"O'Hara's Nitro Irish Stout",
+				'Stout - Irish (Nitro)',
+				4.3,
+				{ conf: 'high', image: '/beer-images/o-hara-s-nitro-irish-stout.jpg' }
+			],
 			["O'Hara's Irish Red Nitro", 'Red Ale - Irish (Nitro)', 4.3, { conf: 'high' }],
 			// image src: https://carlowbrewing.com/wp-content/uploads/2013/10/IPA-glsss-bottle-for-IPA-Page.png
 			[
@@ -1062,13 +1082,31 @@ const DATA = {
 				6.5,
 				{ conf: 'high', image: '/beer-images/st-peter-s-cream-stout.jpg' }
 			],
-			["St Peter's India Pale Ale", 'IPA - English', 5.5, { conf: 'high' }],
-			["St Peter's Ruby Red Ale", 'Red Ale', 4.3, { conf: 'high' }],
+			// image src: https://assets.untappd.com/site/beer_logos/beer-22858_a0374_sm.jpeg
+			[
+				"St Peter's India Pale Ale",
+				'IPA - English',
+				5.5,
+				{ conf: 'high', image: '/beer-images/st-peter-s-india-pale-ale.jpg' }
+			],
+			// image src: https://stpetersbrewery.myshopify.com/cdn/shop/products/7611941_T1.jpg
+			[
+				"St Peter's Ruby Red Ale",
+				'Red Ale',
+				4.3,
+				{ conf: 'high', image: '/beer-images/st-peter-s-ruby-red-ale.jpg' }
+			],
+			// image src: https://assets.untappd.com/site/beer_logos/beer-93942_fdef9_sm.jpeg
 			[
 				"St Peter's The Saints Whisky Beer",
 				'Whisky Beer',
 				4.8,
-				{ color: 'brown-ale', flavor: ['whisky', 'malt', 'oak', 'warming'], conf: 'medium' }
+				{
+					color: 'brown-ale',
+					flavor: ['whisky', 'malt', 'oak', 'warming'],
+					conf: 'medium',
+					image: '/beer-images/st-peter-s-the-saints-whisky-beer.jpg'
+				}
 			]
 		]
 	},
@@ -1081,11 +1119,17 @@ const DATA = {
 			src: 'https://www.wychwood.co.uk/'
 		},
 		beers: [
+			// image src: https://hobgoblinbeer.co.uk/wp-content/uploads/2020/04/Bottle_Ruby-2026.jpg
 			[
 				'Wychwood Hobgoblin Ruby',
 				'Ruby Ale',
 				5.2,
-				{ color: 'red-ale', flavor: ['caramel', 'toffee', 'dark-fruit', 'malty'], conf: 'high' }
+				{
+					color: 'red-ale',
+					flavor: ['caramel', 'toffee', 'dark-fruit', 'malty'],
+					conf: 'high',
+					image: '/beer-images/wychwood-hobgoblin-ruby.jpg'
+				}
 			],
 			// image src: https://images.openfoodfacts.org/images/products/501/134/801/5194/front_en.4.400.jpg
 			[
@@ -1101,11 +1145,17 @@ const DATA = {
 				5.3,
 				{ conf: 'high', image: '/beer-images/wychwood-hobgoblin-ipa.jpg' }
 			],
+			// image src: https://hobgoblinbeer.co.uk/wp-content/uploads/2019/10/beers-king.webp
 			[
 				'Wychwood King Goblin',
 				'Strong Ale',
 				6.6,
-				{ color: 'red-ale', flavor: ['caramel', 'dark-fruit', 'malty', 'warming'], conf: 'high' }
+				{
+					color: 'red-ale',
+					flavor: ['caramel', 'dark-fruit', 'malty', 'warming'],
+					conf: 'high',
+					image: '/beer-images/wychwood-king-goblin.jpg'
+				}
 			]
 		]
 	},
@@ -1396,12 +1446,48 @@ const DATA = {
 			src: 'https://www.latrappetrappist.com/en'
 		},
 		beers: [
-			['La Trappe Quadrupel', 'Quadrupel (Trappist)', 10.0, { color: 'brown-ale', conf: 'high' }],
-			['La Trappe Dubbel', 'Dubbel (Trappist)', 7.0, { color: 'brown-ale', conf: 'high' }],
-			['La Trappe Tripel', 'Tripel (Trappist)', 8.0, { color: 'blonde-ale', conf: 'high' }],
-			['La Trappe Blond', 'Belgian Blonde (Trappist)', 6.5, { color: 'blonde-ale', conf: 'high' }],
-			["La Trappe Isid'or", 'Belgian Amber (Trappist)', 7.5, { color: 'amber-ale', conf: 'high' }],
-			['La Trappe Witte', 'Witbier (Trappist)', 5.5, { color: 'blonde-ale', conf: 'high' }]
+			// image src: https://assets.untappd.com/site/beer_logos/beer-1830_c9bdc_sm.jpeg
+			[
+				'La Trappe Quadrupel',
+				'Quadrupel (Trappist)',
+				10.0,
+				{ color: 'brown-ale', conf: 'high', image: '/beer-images/la-trappe-quadrupel.jpg' }
+			],
+			// image src: https://assets.untappd.com/site/beer_logos/beer-368_a466e_sm.jpeg
+			[
+				'La Trappe Dubbel',
+				'Dubbel (Trappist)',
+				7.0,
+				{ color: 'brown-ale', conf: 'high', image: '/beer-images/la-trappe-dubbel.jpg' }
+			],
+			// image src: https://assets.untappd.com/site/beer_logos/beer-2013_43d0c_sm.jpeg
+			[
+				'La Trappe Tripel',
+				'Tripel (Trappist)',
+				8.0,
+				{ color: 'blonde-ale', conf: 'high', image: '/beer-images/la-trappe-tripel.jpg' }
+			],
+			// image src: https://assets.untappd.com/site/beer_logos/beer-17858_4664d_sm.jpeg
+			[
+				'La Trappe Blond',
+				'Belgian Blonde (Trappist)',
+				6.5,
+				{ color: 'blonde-ale', conf: 'high', image: '/beer-images/la-trappe-blond.jpg' }
+			],
+			// image src: https://assets.untappd.com/site/beer_logos/beer-6646_6f88a_sm.jpeg
+			[
+				"La Trappe Isid'or",
+				'Belgian Amber (Trappist)',
+				7.5,
+				{ color: 'amber-ale', conf: 'high', image: '/beer-images/la-trappe-isid-or.jpg' }
+			],
+			// image src: https://assets.untappd.com/site/beer_logos/beer-17860_9120c_sm.jpeg
+			[
+				'La Trappe Witte',
+				'Witbier (Trappist)',
+				5.5,
+				{ color: 'blonde-ale', conf: 'high', image: '/beer-images/la-trappe-witte.jpg' }
+			]
 		]
 	},
 	karmeliet: {
@@ -1412,6 +1498,7 @@ const DATA = {
 			conf: 'high',
 			src: 'https://www.bethedog.com/'
 		},
+		// image src: https://assets.untappd.com/site/beer_logos/beer-6511_10d60_sm.jpeg
 		beers: [
 			[
 				'Tripel Karmeliet',
@@ -1420,7 +1507,8 @@ const DATA = {
 				{
 					color: 'blonde-ale',
 					flavor: ['banana', 'vanilla', 'citrus', 'spicy', 'creamy'],
-					conf: 'high'
+					conf: 'high',
+					image: '/beer-images/tripel-karmeliet.jpg'
 				}
 			]
 		]
@@ -1599,7 +1687,15 @@ const DATA = {
 			conf: 'medium',
 			src: 'name+knowledge'
 		},
-		beers: [['La Corne Tripel', 'Belgian Tripel', 10.0, { color: 'blonde-ale', conf: 'medium' }]]
+		// image src: https://assets.untappd.com/site/beer_logos/beer-121880_e7666_sm.jpeg
+		beers: [
+			[
+				'La Corne Tripel',
+				'Belgian Tripel',
+				10.0,
+				{ color: 'blonde-ale', conf: 'medium', image: '/beer-images/la-corne-tripel.jpg' }
+			]
+		]
 	},
 	liefmans: {
 		_: {
@@ -1633,14 +1729,32 @@ const DATA = {
 			src: 'https://chimay.com/en/'
 		},
 		beers: [
+			// image src: https://chimay.com/wp-content/uploads/2020/12/beer-bleu-us-33cl.png
 			[
 				'Chimay Blue',
 				'Belgian Strong Dark Ale (Trappist)',
 				9.0,
-				{ color: 'brown-ale', flavor: ['dark-fruit', 'caramel', 'spicy', 'warming'], conf: 'high' }
+				{
+					color: 'brown-ale',
+					flavor: ['dark-fruit', 'caramel', 'spicy', 'warming'],
+					conf: 'high',
+					image: '/beer-images/chimay-blue.jpg'
+				}
 			],
-			['Chimay Red', 'Dubbel (Trappist)', 7.0, { color: 'brown-ale', conf: 'high' }],
-			['Chimay White Tripel', 'Tripel (Trappist)', 8.0, { color: 'blonde-ale', conf: 'high' }]
+			// image src: https://chimay.com/wp-content/uploads/2020/03/beer-rouge-33cl.png
+			[
+				'Chimay Red',
+				'Dubbel (Trappist)',
+				7.0,
+				{ color: 'brown-ale', conf: 'high', image: '/beer-images/chimay-red.jpg' }
+			],
+			// image src: https://chimay.com/wp-content/uploads/2020/12/beer-cinqsens-us-33cl.png
+			[
+				'Chimay White Tripel',
+				'Tripel (Trappist)',
+				8.0,
+				{ color: 'blonde-ale', conf: 'high', image: '/beer-images/chimay-white-tripel.jpg' }
+			]
 		]
 	},
 	rochefort: {
@@ -1703,7 +1817,13 @@ const DATA = {
 				4.8,
 				{ color: 'blonde-ale', conf: 'medium', image: '/beer-images/corsendonk-blanche.jpg' }
 			],
-			['Corsendonk Gold Tripel', 'Belgian Tripel', 8.5, { color: 'blonde-ale', conf: 'medium' }]
+			// image src: https://www.corsendonk.com/images/beers/image/9/corsendonk-gold-tripel.jpg
+			[
+				'Corsendonk Gold Tripel',
+				'Belgian Tripel',
+				8.5,
+				{ color: 'blonde-ale', conf: 'medium', image: '/beer-images/corsendonk-gold-tripel.jpg' }
+			]
 		]
 	},
 	delirium: {
@@ -1715,23 +1835,41 @@ const DATA = {
 			src: 'https://www.delirium.be/en'
 		},
 		beers: [
+			// image src: https://www.delirium.be/themes/custom/delirium/assets/img/beers/beer_delirium_tremens_bottle.png
 			[
 				'Delirium Tremens',
 				'Belgian Strong Golden Ale',
 				8.5,
-				{ color: 'blonde-ale', flavor: ['fruity', 'spicy', 'honey', 'dry'], conf: 'high' }
+				{
+					color: 'blonde-ale',
+					flavor: ['fruity', 'spicy', 'honey', 'dry'],
+					conf: 'high',
+					image: '/beer-images/delirium-tremens.jpg'
+				}
 			],
+			// image src: https://www.delirium.be/themes/custom/delirium/assets/img/beers/beer_delirium_nocturnum_bottle.png
 			[
 				'Delirium Nocturnum',
 				'Belgian Strong Dark Ale',
 				8.5,
-				{ color: 'brown-ale', flavor: ['dark-fruit', 'caramel', 'spicy', 'warming'], conf: 'high' }
+				{
+					color: 'brown-ale',
+					flavor: ['dark-fruit', 'caramel', 'spicy', 'warming'],
+					conf: 'high',
+					image: '/beer-images/delirium-nocturnum.jpg'
+				}
 			],
+			// image src: https://www.delirium.be/themes/custom/delirium/assets/img/beers/beer_delirium_red_bottle.png
 			[
 				'Delirium Red',
 				'Belgian Fruit Ale - Cherry',
 				8.0,
-				{ color: 'red-ale', flavor: ['cherry', 'sweet', 'fruity', 'spicy'], conf: 'high' }
+				{
+					color: 'red-ale',
+					flavor: ['cherry', 'sweet', 'fruity', 'spicy'],
+					conf: 'high',
+					image: '/beer-images/delirium-red.jpg'
+				}
 			]
 		]
 	},
@@ -1743,12 +1881,18 @@ const DATA = {
 			conf: 'high',
 			src: 'name+knowledge'
 		},
+		// image src: https://www.mongozo.com/sites/mongozo/files/styles/width_768/public/beer-detail/afbeelding/2023-08/pils-fles.png
 		beers: [
 			[
 				'Mongozo Premium Pilsener (Gluten Free)',
 				'Pilsner - Gluten Free',
 				5.0,
-				{ gf: true, color: 'pale-lager', conf: 'high' }
+				{
+					gf: true,
+					color: 'pale-lager',
+					conf: 'high',
+					image: '/beer-images/mongozo-premium-pilsener-gluten-free.jpg'
+				}
 			]
 		]
 	},
@@ -1792,7 +1936,13 @@ const DATA = {
 				5.1,
 				{ color: 'brown-ale', conf: 'high', image: '/beer-images/bernard-dark-lager.jpg' }
 			],
-			['Bernard Celebration Lager', 'Pale Lager', 5.0, { color: 'pale-lager', conf: 'medium' }]
+			// image src: https://assets.untappd.com/site/beer_logos/beer-14628_e9c5b_sm.jpeg
+			[
+				'Bernard Celebration Lager',
+				'Pale Lager',
+				5.0,
+				{ color: 'pale-lager', conf: 'medium', image: '/beer-images/bernard-celebration-lager.jpg' }
+			]
 		]
 	},
 	kozel: {
@@ -1804,11 +1954,17 @@ const DATA = {
 			src: 'name+knowledge'
 		},
 		beers: [
+			// image src: https://assets.untappd.com/site/beer_logos/beer-70150_b69cf_sm.jpeg
 			[
 				'Kozel Dark',
 				'Dark Lager',
 				3.8,
-				{ color: 'brown-ale', flavor: ['caramel', 'roasted-malt', 'sweet', 'smooth'], conf: 'high' }
+				{
+					color: 'brown-ale',
+					flavor: ['caramel', 'roasted-malt', 'sweet', 'smooth'],
+					conf: 'high',
+					image: '/beer-images/kozel-dark.jpg'
+				}
 			]
 		]
 	},
@@ -2747,11 +2903,17 @@ const DATA = {
 			src: 'https://www.kopparbergcider.com/'
 		},
 		beers: [
+			// image src: https://kopparberg.com/wp-content/uploads/2024/11/Kopparberg_AlcoholFree_SL_Still_13-375x420.jpg
 			[
 				'Kopparberg Strawberry & Lime (0%)',
 				'Cider - Non-Alcoholic',
 				0,
-				{ color: null, flavor: ['strawberry', 'lime', 'sweet', 'refreshing'], conf: 'high' }
+				{
+					color: null,
+					flavor: ['strawberry', 'lime', 'sweet', 'refreshing'],
+					conf: 'high',
+					image: '/beer-images/kopparberg-strawberry-lime-0.jpg'
+				}
 			]
 		]
 	},
@@ -2823,6 +2985,7 @@ const DATA = {
 				6.5,
 				{ brewery: 'Ultrasphere', conf: 'low' }
 			],
+			// image src: https://target.scene7.com/is/image/Target/GUEST_d710f3cf-1061-450f-bfad-b56ba13f47c0
 			[
 				'Kopparberg Strawberry & Lime',
 				'Cider - Fruit',
@@ -2834,7 +2997,8 @@ const DATA = {
 					color: null,
 					flavor: ['strawberry', 'lime', 'sweet', 'refreshing'],
 					conf: 'medium',
-					notes: 'Alcoholic version (distinct from the 0% listed separately).'
+					notes: 'Alcoholic version (distinct from the 0% listed separately).',
+					image: '/beer-images/kopparberg-strawberry-lime.jpg'
 				}
 			]
 		]
