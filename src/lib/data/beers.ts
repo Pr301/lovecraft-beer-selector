@@ -1,6 +1,10 @@
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '$lib/firebase';
 
+// Local dev reads from a separate `beersDev` collection so in-progress data
+// changes never touch the collection the deployed app reads from.
+export const BEERS_COLLECTION = import.meta.env.DEV ? 'beersDev' : 'beers';
+
 export type TypeId = 'aromatic' | 'bitter' | 'fruity' | 'gluten-free' | 'crispy' | 'wheat';
 export type ColorId =
 	| 'pale-lager'
@@ -131,19 +135,29 @@ export const countryMeta: Record<CountryId, { name: string; flag: string }> = {
 // truth; populated by scripts/migrate-beers-to-firestore.mjs) mapped into the
 // app's Beer shape. The source data uses free-text country/city and has no
 // `type`, so we slug the origin and derive the questionnaire `types` here.
+//
+// Every non-trivial field is stored as { value, source, confidence } rather
+// than a bare value — see scripts/build-beers-enriched.mjs and the "Sources"
+// column on /admin/beers. The quiz app only cares about `.value`.
 // ---------------------------------------------------------------------------
+interface Sourced<T> {
+	value: T;
+	source: string | null;
+	confidence: string;
+}
+
 interface RawBeer {
 	id: string;
 	name: string;
-	brewery: string | null;
-	style: string;
-	abv: number | null;
-	ibu: number | null;
-	country: string | null;
-	city: string | null;
-	color: ColorId | null;
-	flavor: string[];
-	gluten_free: boolean | null;
+	brewery: Sourced<string | null>;
+	style: Sourced<string>;
+	abv: Sourced<number | null>;
+	ibu: Sourced<number | null>;
+	country: Sourced<string | null>;
+	city: Sourced<string | null>;
+	color: Sourced<ColorId | null>;
+	flavor: Sourced<string[]>;
+	gluten_free: Sourced<boolean | null>;
 	notes: string;
 	style_guideline: StyleGuideline | null;
 	image: string | null;
@@ -372,7 +386,7 @@ const STYLE_KEY_COLOR: Record<string, ColorId> = {
 // Fallback for the handful of beers with no BA style key (ciders/radlers): a trimmed
 // version of the old style+flavour regex, returning a single best-guess type.
 function fallbackTypes(raw: RawBeer): TypeId[] {
-	const s = (raw.style + ' ' + raw.flavor.join(' ')).toLowerCase();
+	const s = (raw.style.value + ' ' + raw.flavor.value.join(' ')).toLowerCase();
 	if (/weiss|weizen|hefe|\bwit\b|witte|wheat|weiz/.test(s)) return ['wheat'];
 	if (
 		/sour|gose|lambic|kriek|framboise|cassis|cider|radler|fruit|cherry|berry|mango|peach|passion|raspberry|strawberry|apple|blueberry/.test(
@@ -394,7 +408,7 @@ function fallbackTypes(raw: RawBeer): TypeId[] {
 // port of colorFor() from scripts/build-beers-enriched.mjs. Always returns a ColorId
 // (never null) so Beer.color stays non-null; the truly colorless ones land on blonde-ale.
 function fallbackColor(raw: RawBeer): ColorId {
-	const s = raw.style.toLowerCase();
+	const s = raw.style.value.toLowerCase();
 	if (
 		/kriek|cherry|framboise|raspberry|cassis|strawberry|fruit lambic|rouge|red ale|red ipa|red beer|ruby/.test(
 			s
@@ -437,7 +451,7 @@ function deriveColor(raw: RawBeer): ColorId {
 // Derive the questionnaire types from the BA style key + dietary flag (multi-tag).
 function deriveTypes(raw: RawBeer): TypeId[] {
 	const tags = new Set<TypeId>();
-	if (raw.gluten_free) tags.add('gluten-free'); // dietary flag is authoritative
+	if (raw.gluten_free.value) tags.add('gluten-free'); // dietary flag is authoritative
 	const key = raw.style_guideline?.key;
 	if (key && STYLE_KEY_TYPES[key]) {
 		for (const t of STYLE_KEY_TYPES[key]) tags.add(t);
@@ -451,15 +465,15 @@ function mapRawBeer(raw: RawBeer): Beer {
 	return {
 		id: raw.id,
 		name: raw.name,
-		brewery: raw.brewery ?? 'Unknown',
-		style: raw.style,
-		abv: raw.abv ?? 0,
-		ibu: raw.ibu,
+		brewery: raw.brewery.value ?? 'Unknown',
+		style: raw.style.value,
+		abv: raw.abv.value ?? 0,
+		ibu: raw.ibu.value,
 		color: deriveColor(raw),
-		country: countrySlug(raw.country),
-		city: citySlug(raw.city),
+		country: countrySlug(raw.country.value),
+		city: citySlug(raw.city.value),
 		types: deriveTypes(raw),
-		flavor: raw.flavor,
+		flavor: raw.flavor.value,
 		notes: raw.notes || undefined,
 		styleGuideline: raw.style_guideline ?? undefined,
 		image: raw.image ?? null
@@ -471,7 +485,7 @@ function mapRawBeer(raw: RawBeer): Beer {
 export let beers: Beer[] = [];
 
 export async function loadBeers(): Promise<Beer[]> {
-	const snapshot = await getDocs(collection(db, 'beers'));
+	const snapshot = await getDocs(collection(db, BEERS_COLLECTION));
 	beers = snapshot.docs.map((doc) => mapRawBeer(doc.data() as RawBeer));
 	return beers;
 }
