@@ -150,7 +150,7 @@ interface RawBeer {
 	id: string;
 	name: string;
 	brewery: Sourced<string | null>;
-	style: Sourced<string>;
+	style: Sourced<string | null>;
 	abv: Sourced<number | null>;
 	ibu: Sourced<number | null>;
 	country: Sourced<string | null>;
@@ -386,7 +386,7 @@ const STYLE_KEY_COLOR: Record<string, ColorId> = {
 // Fallback for the handful of beers with no BA style key (ciders/radlers): a trimmed
 // version of the old style+flavour regex, returning a single best-guess type.
 function fallbackTypes(raw: RawBeer): TypeId[] {
-	const s = (raw.style.value + ' ' + raw.flavor.value.join(' ')).toLowerCase();
+	const s = ((raw.style.value ?? '') + ' ' + raw.flavor.value.join(' ')).toLowerCase();
 	if (/weiss|weizen|hefe|\bwit\b|witte|wheat|weiz/.test(s)) return ['wheat'];
 	if (
 		/sour|gose|lambic|kriek|framboise|cassis|cider|radler|fruit|cherry|berry|mango|peach|passion|raspberry|strawberry|apple|blueberry/.test(
@@ -408,7 +408,7 @@ function fallbackTypes(raw: RawBeer): TypeId[] {
 // port of colorFor() from scripts/build-beers-enriched.mjs. Always returns a ColorId
 // (never null) so Beer.color stays non-null; the truly colorless ones land on blonde-ale.
 function fallbackColor(raw: RawBeer): ColorId {
-	const s = raw.style.value.toLowerCase();
+	const s = (raw.style.value ?? '').toLowerCase();
 	if (
 		/kriek|cherry|framboise|raspberry|cassis|strawberry|fruit lambic|rouge|red ale|red ipa|red beer|ruby/.test(
 			s
@@ -466,7 +466,7 @@ function mapRawBeer(raw: RawBeer): Beer {
 		id: raw.id,
 		name: raw.name,
 		brewery: raw.brewery.value ?? 'Unknown',
-		style: raw.style.value,
+		style: raw.style.value ?? 'Unknown',
 		abv: raw.abv.value ?? 0,
 		ibu: raw.ibu.value,
 		color: deriveColor(raw),
