@@ -1,6 +1,7 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "dev", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev"], "port": 5173, "autoPort": true }
+    { "name": "dev", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev"], "port": 5173, "autoPort": true },
+    { "name": "hosting-preview", "runtimeExecutable": "npx", "runtimeArgs": ["firebase", "serve", "--only", "hosting"], "port": 5000, "autoPort": true }
   ]
 }
